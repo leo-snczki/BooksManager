@@ -1,5 +1,6 @@
 from clear import clear_term
 from readkeys import getch
+#from emprestimo import EmprestimoLivro
 
 def MostrarMenu():
     opcoes = [
@@ -32,6 +33,17 @@ def Menu (opcao):
             print("\nOpção inválida.\n")
             getch(print("Pressione qualquer tecla para tentar novamente..."))
             return True
+
+#                             _      
+# ___ __ __ ___  _ __   _ __ | | ___ 
+#/ -_)\ \ // -_)| '  \ | '_ \| |/ _ \
+#\___|/_\_\\___||_|_|_|| .__/|_|\___/
+# __| | ___   _  _  ___|_|_          
+#/ _` |/ -_) | || |(_-</ _ \         
+#\__,_|\___|  \_,_|/__/\___/   
+
+#emprestimo = EmprestimoLivro("O pequeno principe","Antoine de Saint-Exupéry", "6", "dia 19 de maio", "leonardo", "l2469")
+#print(emprestimo.livro.autor)
 
 continuar = True
 
