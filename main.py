@@ -1,6 +1,10 @@
 from clear import clear_term
 from readkeys import getch
 #from emprestimo import EmprestimoLivro
+from gestorLeitor import GestorLeitor
+from leitor import Leitor
+
+leitores_gestor = GestorLeitor()
 
 def MostrarMenu():
     opcoes = [
@@ -15,6 +19,17 @@ def MostrarMenu():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+def cadastrar_leitor():
+    clear_term()
+    print("Cadastrar novo leitor")
+    nome = input("Nome: ")
+    matricula = input("Matrícula: ")
+    leitor = Leitor(nome, matricula)
+    leitores_gestor.adicionar_leitor(leitor)
+    print(f"\nLeitor '{nome}' cadastrado com sucesso!")
+    print("\nPressione qualquer tecla para continuar...")
+    getch()
+
 def Menu (opcao):
     match opcao:
         case "1":
@@ -22,7 +37,8 @@ def Menu (opcao):
         case "2":
             return True # Lógica não implementada ainda
         case "3":
-            return True # Lógica não implementada ainda
+            cadastrar_leitor()
+            return True
         case "4":
             return True # Lógica não implementada ainda
         case "5":
