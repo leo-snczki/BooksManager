@@ -59,13 +59,27 @@ def criar_livro():
     print("\nPressione qualquer tecla para continuar...")
     getch()
 
+def listar_livros():
+
+    clear_term()
+    livros = livros_gestor.listar_livros()
+    if not livros:
+        print("Nenhum livro cadastrado.")
+    else:
+        for livro in livros:
+            status = "Disponível" if livro.disponivel else "Emprestado"
+            print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
+    print("\nPressione qualquer tecla para continuar...")
+    getch()
+
 def Menu (opcao):
     match opcao:
         case "1":
             criar_livro()
             return True
         case "2":
-            return True # Lógica não implementada ainda
+            listar_livros()
+            return True
         case "3":
             cadastrar_leitor()
             return True
