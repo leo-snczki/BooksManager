@@ -35,6 +35,18 @@ def cadastrar_leitor():
     print("\nPressione qualquer tecla para continuar...")
     getch()
     
+def listar_leitores():
+    clear_term()
+    leitores = leitores_gestor.listar_leitores()
+    if not leitores:
+        print("Nenhum leitor cadastrado.")
+    else:
+        print("Leitores cadastrados:\n")
+        for leitor in leitores:
+            print(f"{leitor.matricula}: {leitor.nome}")
+    print("\nPressione qualquer tecla para continuar...")
+    getch()
+    
 def criar_livro():
     clear_term()
     print("Criar novo livro")
@@ -58,7 +70,8 @@ def Menu (opcao):
             cadastrar_leitor()
             return True
         case "4":
-            return True # Lógica não implementada ainda
+            listar_leitores()
+            return True
         case "5":
             return True # Lógica não implementada ainda
         case "6":
