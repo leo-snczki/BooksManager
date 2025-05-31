@@ -47,7 +47,8 @@ def Menu (opcao):
             return False
         case _:
             print("\nOpção inválida.\n")
-            getch(print("Pressione qualquer tecla para tentar novamente..."))
+            getch()
+            print("Pressione qualquer tecla para tentar novamente...")
             return True
 
 #                             _      
