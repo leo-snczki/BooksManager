@@ -13,12 +13,15 @@ livros_gestor = gestorLivros()
 
 def MostrarMenu():
     opcoes = [
-        "1 - Criar livro",
-        "2 - Ver livros",
-        "3 - Cadastrar leitor",
+        "1 - Criar Livro",
+        "2 - Cadastrar Leitor",
+        "3 - Ver Livros",
         "4 - Ver leitores",
-        "5 - Alterar status de um livro",
-        "6 - Sair"
+        "5 - Deletar Livro",
+        "6 - Deletar Leitor",
+        "7 - Emprestar Livro",
+        "8 - Devolver Livro",
+        "0 - Sair"
     ]
     
     print("\n".join(opcoes))
@@ -78,10 +81,10 @@ def Menu (opcao):
             criar_livro()
             return True
         case "2":
-            listar_livros()
-            return True
-        case "3":
             cadastrar_leitor()
+            return True
+        case "3":           
+            listar_livros()
             return True
         case "4":
             listar_leitores()
@@ -89,6 +92,12 @@ def Menu (opcao):
         case "5":
             return True # Lógica não implementada ainda
         case "6":
+            return True # Lógica não implementada ainda
+        case "7":
+            return True # Lógica não implementada ainda
+        case "8":
+            return True # Lógica não implementada ainda
+        case "0":
             return False
         case _:
             print("\nOpção inválida.\n")
