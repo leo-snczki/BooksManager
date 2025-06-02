@@ -27,6 +27,15 @@ def MostrarMenu():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+def SairDoLoop():
+    clear_term()
+    print("Deseja realmente sair?")
+    sair = input("Digite 's' para sair ou 'n' para continuar: ")
+    if sair == "s":
+        return False
+    else:
+        return True
+
 def cadastrar_leitor():
     clear_term()
     print("Cadastrar novo leitor")
@@ -98,7 +107,7 @@ def Menu (opcao):
         case "8":
             return True # Lógica não implementada ainda
         case "0":
-            return False
+            SairDoLoop()
         case _:
             print("\nOpção inválida.\n")
             getch()
