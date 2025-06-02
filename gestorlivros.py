@@ -1,10 +1,12 @@
 import json
 from livro import Livro
+from emprestimo import EmprestimoLivro
 
 class gestorLivros:
 
     def __init__(self):
         self.livros: list[Livro] = []
+        self.emprestimos: list[EmprestimoLivro] = []
 
     def adicionar_livro(self, livro):
         self.livros.append(livro)
@@ -15,19 +17,17 @@ class gestorLivros:
     def listar_livros(self):
         return self.livros
     
-    def emprestar_livro(self, codigo):
+    def emprestar_livro(self, codigo, nome_leitor, matricula, data_emprestimo):
         for livro in self.livros:
             if livro.codigo == codigo and livro.disponivel:
                 livro.disponivel = False
+                emprestimo = EmprestimoLivro(
+                    livro.titulo, livro.autor, livro.codigo, 
+                    data_emprestimo, nome_leitor, matricula
+                )
+                self.emprestimos.append(emprestimo)
                 return f'O livro "{livro.titulo}" foi emprestado com sucesso.'
         return "Livro não disponível ou não encontrado."
-
-    def devolver_livro(self, codigo):
-        for livro in self.livros:
-            if livro.codigo == codigo and not livro.disponivel:
-                livro.disponivel = True
-                return f'O livro "{livro.titulo}" foi devolvido com sucesso.'
-        return "Livro não está emprestado ou não encontrado."
     
     def carregar_livros_json(self, arquivo):
         try:
