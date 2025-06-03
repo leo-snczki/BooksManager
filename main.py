@@ -131,6 +131,7 @@ def Menu (opcao):
             print("Pressione qualquer tecla para tentar novamente...")
             return True
 
+leitores_gestor.carregar_leitores_json("leitores.json")
 continuar = True
 
 while(continuar):
