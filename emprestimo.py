@@ -1,11 +1,11 @@
 from livro import Livro
 from leitor import Leitor
-import datetime
+from datetime import datetime
 
 # lista_de_livros
 class EmprestimoLivro:
-    def __init__(self, titulo, autor, codigo, data_emprestimo, nome, matricula):
-        self.livro = Livro (titulo, autor, codigo)
-        self.leitor = Leitor (nome, matricula)
-        self.data_emprestimo = data_emprestimo
+    def __init__(self, livro: Livro, leitor: Leitor):
+        self.livro = livro
+        self.leitor = leitor
+        self.data_emprestimo = datetime.today()
         self.data_devolucao = None

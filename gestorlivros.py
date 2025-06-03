@@ -17,14 +17,11 @@ class gestorLivros:
     def listar_livros(self):
         return self.livros
     
-    def emprestar_livro(self, codigo, nome_leitor, matricula, data_emprestimo):
+    def emprestar_livro_obj(self, codigo, leitor):
         for livro in self.livros:
             if livro.codigo == codigo and livro.disponivel:
                 livro.disponivel = False
-                emprestimo = EmprestimoLivro(
-                    livro.titulo, livro.autor, livro.codigo, 
-                    data_emprestimo, nome_leitor, matricula
-                )
+                emprestimo = EmprestimoLivro(livro, leitor)
                 self.emprestimos.append(emprestimo)
                 return f'O livro "{livro.titulo}" foi emprestado com sucesso.'
         return "Livro não disponível ou não encontrado."

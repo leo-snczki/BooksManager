@@ -1,6 +1,5 @@
 from clear import clear_term
 from readkeys import getch
-#from emprestimo import EmprestimoLivro
 from gestorLeitor import GestorLeitor
 from gestorlivros import gestorLivros
 from leitor import Leitor
@@ -84,6 +83,23 @@ def listar_livros():
     print("\nPressione qualquer tecla para continuar...")
     getch()
 
+def emprestar_livro():
+    clear_term()
+    print("Emprestar Livro")
+    
+    codigo = input("Código do livro: ")
+    identificador = input("Nome ou Matrícula do leitor: ")
+
+    leitor = leitores_gestor.encontrar_leitor(identificador)
+    if leitor is None: # Se o leitor não existir.
+        print("\nLeitor não encontrado.")
+    else:
+        resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
+        print(f"\n{resultado}")
+    print("\nPressione qualquer tecla para continuar...")
+    getch()
+
+
 def Menu (opcao):
     match opcao:
         case "1":
@@ -103,7 +119,8 @@ def Menu (opcao):
         case "6":
             return True # Lógica não implementada ainda
         case "7":
-            return True # Lógica não implementada ainda
+            emprestar_livro()
+            return True
         case "8":
             return True # Lógica não implementada ainda
         case "0":
@@ -113,17 +130,6 @@ def Menu (opcao):
             getch()
             print("Pressione qualquer tecla para tentar novamente...")
             return True
-
-#                             _      
-# ___ __ __ ___  _ __   _ __ | | ___ 
-#/ -_)\ \ // -_)| '  \ | '_ \| |/ _ \
-#\___|/_\_\\___||_|_|_|| .__/|_|\___/
-# __| | ___   _  _  ___|_|_          
-#/ _` |/ -_) | || |(_-</ _ \         
-#\__,_|\___|  \_,_|/__/\___/   
-
-#emprestimo = EmprestimoLivro("O pequeno principe","Antoine de Saint-Exupéry", "6", "dia 19 de maio", "leonardo", "l2469")
-#print(emprestimo.livro.autor)
 
 continuar = True
 
