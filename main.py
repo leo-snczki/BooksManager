@@ -5,26 +5,54 @@ from gestorlivros import gestorLivros
 from leitor import Leitor
 from livro import Livro
 
-clear_term()
-
 leitores_gestor = GestorLeitor()
 livros_gestor = gestorLivros()
 
-def MostrarMenu():
+def MostrarMenuInicial():
     opcoes = [
-        "1 - Criar Livro",
-        "2 - Cadastrar Leitor",
-        "3 - Ver Livros",
-        "4 - Ver leitores",
-        "5 - Deletar Livro",
-        "6 - Deletar Leitor",
-        "7 - Emprestar Livro",
-        "8 - Devolver Livro",
+        "1 - Adicionar",
+        "2 - Ver",
+        "3 - Deletar",
+        "4 - Emprestar",
+        "5 - Devolver",
         "0 - Sair"
     ]
     
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
+    
+def MostrarMenuAdicionar():
+    opcoes = [
+        "1 - Adicionar Livro",
+        "2 - Cadastrar Leitor",
+        "0 - Voltar"
+    ]
+    
+    print("\n".join(opcoes))
+    print("\nOpção: ", end="")
+
+def MostrarMenuVer():
+    opcoes = [
+        "1 - Ver Livros",
+        "2 - Ver Leitores",
+        "3 - Ver empréstimos",
+        "4 - Ver ultimas devoluções"
+        "0 - Voltar"
+    ]
+
+    print("\n".join(opcoes))
+    print("\nOpção: ", end="")
+
+def MostrarMenuDeletar():
+    opcoes = [
+        "1 - Deletar Livro",
+        "2 - Deletar Leitor",
+        "0 - Voltar"
+    ]
+
+    print("\n".join(opcoes))
+    print("\nOpção: ", end="")
+
 
 def SairDoLoop():
     clear_term()
@@ -99,43 +127,90 @@ def emprestar_livro():
     print("\nPressione qualquer tecla para continuar...")
     getch()
 
-
-def Menu (opcao):
+def Menu(opcao):
     match opcao:
-        case "1":
-            criar_livro()
+        case "1":  # Adicionar
+            while True:
+                clear_term()
+                MostrarMenuAdicionar()
+                sub_opcao = input()
+                match sub_opcao:
+                    case "1":
+                        criar_livro()
+                    case "2":
+                        cadastrar_leitor()
+                    case "0":
+                        break
+                    case _:
+                        print("Opção inválida.")
+                        getch()
             return True
-        case "2":
-            cadastrar_leitor()
+
+        case "2":  # Ver
+            while True:
+                clear_term()
+                MostrarMenuVer()
+                sub_opcao = input()
+                match sub_opcao:
+                    case "1":
+                        listar_livros()
+                    case "2":
+                        listar_leitores()
+                    case "3":
+                        print("Ver Empréstimos ainda não implementado.")
+                        getch()
+                    case "4":
+                        print("Ver ultimas devoluções ainda não implementado.")
+                        getch()
+                    case "0":
+                        break
+                    case _:
+                        print("Opção inválida.")
+                        getch()
             return True
-        case "3":           
-            listar_livros()
+
+        case "3":  # Deletar
+            while True:
+                clear_term()
+                MostrarMenuDeletar()
+                sub_opcao = input()
+                match sub_opcao:
+                    case "1":
+                        print("Deletar livro ainda não implementado.")
+                        getch()
+                    case "2":
+                        print("Deletar leitor ainda não implementado.")
+                        getch()
+                    case "0":
+                        break
+                    case _:
+                        print("Opção inválida.")
+                        getch()
             return True
-        case "4":
-            listar_leitores()
-            return True
-        case "5":
-            return True # Lógica não implementada ainda
-        case "6":
-            return True # Lógica não implementada ainda
-        case "7":
+
+        case "4":  # Emprestar
             emprestar_livro()
             return True
-        case "8":
-            return True # Lógica não implementada ainda
-        case "0":
-            SairDoLoop()
-        case _:
-            print("\nOpção inválida.\n")
+
+        case "5":  # Devolver
+            print("Devolução ainda não implementada.")
             getch()
-            print("Pressione qualquer tecla para tentar novamente...")
             return True
+
+        case "0":  # Voltar/Sair
+            return not SairDoLoop()
+
+        case _:
+            print("Opção inválida.")
+            getch()
+            return True
+
 
 leitores_gestor.carregar_leitores_json("leitores.json")
 continuar = True
 
 while(continuar):
     clear_term()
-    MostrarMenu()
+    MostrarMenuInicial()
     opcao = str(input())
     continuar = Menu(opcao)
