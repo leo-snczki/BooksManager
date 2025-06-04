@@ -25,6 +25,7 @@ def MostrarMenuAdicionar():
     opcoes = [
         "1 - Adicionar Livro",
         "2 - Cadastrar Leitor",
+        "3 - Pesquisar e adicionar Livro",
         "0 - Voltar"
     ]
     
@@ -36,7 +37,7 @@ def MostrarMenuVer():
         "1 - Ver Livros",
         "2 - Ver Leitores",
         "3 - Ver empréstimos",
-        "4 - Ver ultimas devoluções"
+        "4 - Ver ultimas devoluções",
         "0 - Voltar"
     ]
 
@@ -127,6 +128,34 @@ def emprestar_livro():
     print("\nPressione qualquer tecla para continuar...")
     getch()
 
+def pesquisar_adicionar_livro():
+    termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
+    resultados = livros_gestor.pesquisar_livros_openlibrary(termo)
+
+    if not resultados:
+        print("Nenhum livro encontrado.")
+        return True
+
+    print("\nResultados encontrados:")
+    for i, (codigo, titulo, autor) in enumerate(resultados, start=1):
+        print(f"{i}. [{codigo}] {titulo} - {autor}")
+
+    escolha = input("Digite o número do livro que deseja adicionar (ou Enter para cancelar): ")
+    if not escolha.isdigit():
+        print("Operação cancelada.")
+        getch()
+        return
+
+    index = int(escolha) - 1
+    if not 0 <= index < len(resultados):
+        print("Número inválido.")
+        getch()
+        
+    else:
+        codigo = resultados[index][0]
+        livros_gestor.adicionar_livro_por_codigo(codigo, resultados)
+
+
 def Menu(opcao):
     match opcao:
         case "1":  # Adicionar
@@ -139,6 +168,8 @@ def Menu(opcao):
                         criar_livro()
                     case "2":
                         cadastrar_leitor()
+                    case "3":
+                        pesquisar_adicionar_livro()
                     case "0":
                         break
                     case _:
