@@ -58,8 +58,8 @@ def MostrarMenuDeletar():
 def SairDoLoop():
     clear_term()
     print("Deseja realmente sair?")
-    sair = input("Digite 's' para sair ou 'n' para continuar: ")
-    if sair == "s":
+    sair = input("Digite 's' para sair ou 'n' para continuar: ")    
+    if sair == "n":
         return False
     else:
         return True
