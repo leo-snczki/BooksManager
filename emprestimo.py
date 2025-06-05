@@ -1,6 +1,6 @@
 from livro import Livro
 from leitor import Leitor
-from datetime import datetime
+from datetime import datetime,timedelta
 
 # lista_de_livros
 class EmprestimoLivro:
@@ -8,4 +8,5 @@ class EmprestimoLivro:
         self.livro = livro
         self.leitor = leitor
         self.data_emprestimo = datetime.today()
-        self.data_devolucao = None
+        self.data_para_devolucao = datetime.now() + timedelta(days=7)
+        self.data.devolvida = None
