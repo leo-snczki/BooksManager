@@ -25,6 +25,7 @@ class gestorLivros:
                 emprestimo = EmprestimoLivro(livro, leitor)
                 self.emprestimos.append(emprestimo)
                 return f'O livro "{livro.titulo}" foi emprestado com sucesso (Devolução: {emprestimo.data_devolucao.strftime("%d/%m/%Y")}).'
+                return f'O livro "{livro.titulo}" foi emprestado com sucesso (Devolução: {emprestimo.data_para_devolucao.strftime("%d/%m/%Y")}).'
         return "Livro não disponível ou não encontrado."
     
     def carregar_livros_json(self, arquivo):
