@@ -128,6 +128,18 @@ def emprestar_livro():
     print("\nPressione qualquer tecla para continuar...")
     getch()
 
+def listar_emprestimos():
+
+    clear_term()
+    emprestimos = livros_gestor.listar_emprestimos()
+    if not emprestimos:
+        print("Nenhum empréstimo em curso.")
+    else:
+        for emp in emprestimos:
+            print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
+    print("\nPressione qualquer tecla para continuar...")
+    getch()
+
 def pesquisar_adicionar_livro():
     termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
     resultados = livros_gestor.pesquisar_livros_openlibrary(termo)
@@ -188,8 +200,7 @@ def Menu(opcao):
                     case "2":
                         listar_leitores()
                     case "3":
-                        print("Ver Empréstimos ainda não implementado.")
-                        getch()
+                        listar_emprestimos()
                     case "4":
                         print("Ver ultimas devoluções ainda não implementado.")
                         getch()
