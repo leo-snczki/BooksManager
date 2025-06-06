@@ -148,6 +148,16 @@ def emprestar_livro():
         print(f"\n{resultado}")
     click_para_continuar()
 
+def devolver_livro():
+    limpar_term()
+    print("Devolver Livro")
+
+    codigo = input("Código do livro: ")
+    resultado = livros_gestor.devolver_livro(codigo)
+
+    print(f"\n{resultado}")
+    click_para_continuar()
+
 def listar_emprestimos():
 
     limpar_term()
@@ -157,6 +167,18 @@ def listar_emprestimos():
     else:
         for emp in emprestimos:
             print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
+    click_para_continuar()
+
+def listar_devolucoes():
+    if not livros_gestor.devolucoes:
+        print("Nenhuma devolução registrada.")
+        return
+
+    print("\nLista de Devoluções:")
+    for dev in livros_gestor.devolucoes:
+        # Se a data de devolução for Nula, exibe "Data desconhecida".
+        data_devolucao = dev.data_devolvida or "Data desconhecida"
+        print(f'- "{dev.livro.titulo}" por {dev.livro.autor}, devolvido por {dev.leitor.matricula}:{dev.leitor.nome} em {data_devolucao}')
     click_para_continuar()
 
 def pesquisar_adicionar_livro():
@@ -221,8 +243,7 @@ def Menu(opcao):
                     case "3":
                         listar_emprestimos()
                     case "4":
-                        print("Ver ultimas devoluções ainda não implementado.")
-                        click_para_continuar()
+                        listar_devolucoes()
                     case "0":
                         break
                     case _:
@@ -254,8 +275,7 @@ def Menu(opcao):
             return True
 
         case "5":  # Devolver
-            print("Devolução ainda não implementada.")
-            click_para_continuar()
+            devolver_livro()
             return True
 
         case "6": # Salvar

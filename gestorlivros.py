@@ -3,12 +3,20 @@ import requests
 from livro import Livro
 from emprestimo import EmprestimoLivro
 from terminal import click_para_continuar
+from datetime import datetime
+
+
+def obter_livros():
+    """Obtém os livros do site da API"""
+    response = requests.get("https://livraria-para-teste.herokuapp.com/livros")
+    return response.json()
 
 class gestorLivros:
 
     def __init__(self):
         self.livros: list[Livro] = []
         self.emprestimos: list[EmprestimoLivro] = []
+        self.devolucoes: list[EmprestimoLivro] = []
         self.arquivo = "livros.json"
 
     def adicionar_livro(self, livro):
@@ -28,6 +36,19 @@ class gestorLivros:
                 self.emprestimos.append(emprestimo)
                 return f'O livro "{livro.titulo}" foi emprestado com sucesso (Devolução: {emprestimo.data_para_devolucao}).'
         return "Livro não disponível ou não encontrado."
+
+    def devolver_livro(self, codigo):
+        for emprestimo in self.emprestimos:
+            if emprestimo.livro.codigo == codigo:
+                emprestimo.livro.disponivel = True
+                emprestimo.data_devolvida = datetime.now().strftime("%d/%m/%Y")  # <-- aqui!
+                self.emprestimos.remove(emprestimo)
+                self.devolucoes.append(emprestimo)
+                return f'O livro "{emprestimo.livro.titulo}" foi devolvido com sucesso por {emprestimo.leitor}.'
+        return "Livro não encontrado nos empréstimos."
+    
+    def listar_devolucoes(self):
+        return self.devolucoes
 
     def listar_emprestimos(self):
         return self.emprestimos
