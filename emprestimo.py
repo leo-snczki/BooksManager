@@ -8,5 +8,5 @@ class EmprestimoLivro:
         self.livro = livro
         self.leitor = leitor
         self.data_emprestimo = datetime.today()
-        self.data_para_devolucao = datetime.now() + timedelta(days=7)
+        self.data_para_devolucao = (datetime.now() + timedelta(days=7)).strftime("%d/%m/%Y")
         self.data_devolvida = None
