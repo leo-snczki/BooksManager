@@ -2,12 +2,14 @@ import json
 import requests
 from livro import Livro
 from emprestimo import EmprestimoLivro
+from terminal import click_para_continuar
 
 class gestorLivros:
 
     def __init__(self):
         self.livros: list[Livro] = []
         self.emprestimos: list[EmprestimoLivro] = []
+        self.arquivo = "livros.json"
 
     def adicionar_livro(self, livro):
         self.livros.append(livro)
@@ -30,24 +32,39 @@ class gestorLivros:
     def listar_emprestimos(self):
         return self.emprestimos
     
-    def carregar_livros_json(self, arquivo):
+    def carregar_livros_json(self):
         try:
-            with open(arquivo, 'r', encoding='utf-8') as file:
+            with open(self.arquivo, 'r', encoding='utf-8') as file:
                 livros_json = json.load(file)
                 for livro_json in livros_json:
-                    livro = Livro(
-                        livro_json['titulo'],
-                        livro_json['autor'],
-                        livro_json['codigo']
-                    )
+                    livro = Livro.from_dict(livro_json)
                     self.adicionar_livro(livro)
-            print(f"{len(self.livros)} livro(s) carregado(s) de '{arquivo}'.")
+                return True # permite o if no main.py
+            
+        # Todas as exceções abaixo vão retornar none, 
+        # logo a confirmação do case não vai aparecer.
+        
         except FileNotFoundError:
-            print(f"Arquivo '{arquivo}' não encontrado.")
+            print(f"Arquivo '{self.arquivo}' não encontrado.\n")
+            print("Nenhum livro foi carregado.\n")
+            click_para_continuar()
         except json.JSONDecodeError:
-            print(f"Erro ao ler o arquivo '{arquivo}'. Verifique se o JSON está correto.")
+            print(f"Erro ao ler o arquivo '{self.arquivo}'. Verifique se o JSON está correto.\n")
+            print("Nenhum livro foi carregado.\n")            
+            click_para_continuar()
         except Exception as e:
-            print(f"Erro ao carregar os livros: {e}")
+            print(f"Erro ao carregar os livros: {e}\n")
+            print("Nenhum livro foi carregado.\n")
+            click_para_continuar()
+
+    def salvar_livros_json(self):
+        try:
+            livros_json = [livro.to_dict() for livro in self.livros]
+            with open(self.arquivo, 'w', encoding='utf-8') as file:
+                json.dump(livros_json, file, indent=4, ensure_ascii=False)
+            return True # permite o if no main.py
+        except Exception as e:
+            print(f"Erro ao salvar os livros: {e}")
 
     def pesquisar_livros_openlibrary(self, termo_busca, max_resultados=5):
         url = f"https://openlibrary.org/search.json?q={termo_busca}"
@@ -55,8 +72,7 @@ class gestorLivros:
             response = requests.get(url)
 
             if response.status_code != 200:
-                print(f"Erro ao acessar a API: {response.status_code}")
-                return
+                raise Exception(f"Erro {response.status_code} ao acessar a API")
 
             dados = response.json()
             resultados = []
@@ -69,6 +85,7 @@ class gestorLivros:
 
         except Exception as e:
             print(f"Erro ao buscar livros na Open Library: {e}")
+            click_para_continuar()
             return
     
     def adicionar_livro_por_codigo(self, codigo, resultados):
@@ -80,5 +97,7 @@ class gestorLivros:
                 livro = Livro(titulo, autor, codigo)
                 self.adicionar_livro(livro)
                 print(f'"{titulo}" foi adicionado com sucesso.')
+                click_para_continuar()
                 return
         print("Código não encontrado nos resultados.")
+        click_para_continuar()

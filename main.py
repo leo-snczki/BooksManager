@@ -1,5 +1,4 @@
-from clear import clear_term
-from readkeys import getch
+from terminal import limpar_term,click_para_continuar
 from gestorLeitor import GestorLeitor
 from gestorlivros import gestorLivros
 from leitor import Leitor
@@ -15,6 +14,8 @@ def MostrarMenuInicial():
         "3 - Deletar",
         "4 - Emprestar",
         "5 - Devolver",
+        "6 - Salvar",	
+        "7 - Carregar",
         "0 - Sair"
     ]
     
@@ -54,9 +55,32 @@ def MostrarMenuDeletar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+def MostrarMenuSalvar():
+    opcoes = [
+        "1 - Salvar Todos os dados",
+        "2 - Salvar Livros",
+        "3 - Salvar Leitores",
+        "4 - Salvar Empréstimos",
+        "0 - Voltar"
+    ]
+
+    print("\n".join(opcoes))
+    print("\nOpção: ", end="")
+
+def MostrarMenuCarregar():
+    opcoes = [
+        "1 - Carregar Todos os dados",
+        "2 - Carregar Livros",
+        "3 - Carregar Leitores",
+        "4 - Carregar Empréstimos",
+        "0 - Voltar"
+    ]
+
+    print("\n".join(opcoes))
+    print("\nOpção: ", end="")
 
 def SairDoLoop():
-    clear_term()
+    limpar_term()
     print("Deseja realmente sair?")
     sair = input("Digite 's' para sair ou 'n' para continuar: ")    
     if sair == "n":
@@ -65,18 +89,17 @@ def SairDoLoop():
         return True
 
 def cadastrar_leitor():
-    clear_term()
+    limpar_term()
     print("Cadastrar novo leitor")
     nome = input("Nome: ")
     matricula = input("Matrícula: ")
     leitor = Leitor(nome, matricula)
     leitores_gestor.adicionar_leitor(leitor)
     print(f"\nLeitor '{nome}' cadastrado com sucesso!")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+    click_para_continuar()
     
 def listar_leitores():
-    clear_term()
+    limpar_term()
     leitores = leitores_gestor.listar_leitores()
     if not leitores:
         print("Nenhum leitor cadastrado.")
@@ -84,11 +107,10 @@ def listar_leitores():
         print("Leitores cadastrados:\n")
         for leitor in leitores:
             print(f"{leitor.matricula}: {leitor.nome}")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+    click_para_continuar()
     
 def criar_livro():
-    clear_term()
+    limpar_term()
     print("Criar novo livro")
     titulo = input("Título: ")
     autor = input("Autor: ")
@@ -96,12 +118,12 @@ def criar_livro():
     livro = Livro(titulo, autor, codigo)
     livros_gestor.adicionar_livro(livro)
     print(f"\nLivro '{titulo}' adicionado com sucesso!")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+
+    click_para_continuar()
 
 def listar_livros():
 
-    clear_term()
+    limpar_term()
     livros = livros_gestor.listar_livros()
     if not livros:
         print("Nenhum livro cadastrado.")
@@ -109,11 +131,10 @@ def listar_livros():
         for livro in livros:
             status = "Disponível" if livro.disponivel else "Emprestado"
             print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+    click_para_continuar()
 
 def emprestar_livro():
-    clear_term()
+    limpar_term()
     print("Emprestar Livro")
     
     codigo = input("Código do livro: ")
@@ -125,20 +146,18 @@ def emprestar_livro():
     else:
         resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
         print(f"\n{resultado}")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+    click_para_continuar()
 
 def listar_emprestimos():
 
-    clear_term()
+    limpar_term()
     emprestimos = livros_gestor.listar_emprestimos()
     if not emprestimos:
         print("Nenhum empréstimo em curso.")
     else:
         for emp in emprestimos:
             print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
-    print("\nPressione qualquer tecla para continuar...")
-    getch()
+    click_para_continuar()
 
 def pesquisar_adicionar_livro():
     termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
@@ -146,6 +165,7 @@ def pesquisar_adicionar_livro():
 
     if not resultados:
         print("Nenhum livro encontrado.")
+        click_para_continuar()
         return True
 
     print("\nResultados encontrados:")
@@ -154,15 +174,14 @@ def pesquisar_adicionar_livro():
 
     escolha = input("Digite o número do livro que deseja adicionar (ou Enter para cancelar): ")
     if not escolha.isdigit():
-        print("Operação cancelada.")
-        getch()
+        print("\nOperação cancelada.")
+        click_para_continuar()
         return
 
     index = int(escolha) - 1
     if not 0 <= index < len(resultados):
-        print("Número inválido.")
-        getch()
-        
+        print("Número inválido.")        
+        click_para_continuar()
     else:
         codigo = resultados[index][0]
         livros_gestor.adicionar_livro_por_codigo(codigo, resultados)
@@ -172,7 +191,7 @@ def Menu(opcao):
     match opcao:
         case "1":  # Adicionar
             while True:
-                clear_term()
+                limpar_term()
                 MostrarMenuAdicionar()
                 sub_opcao = input()
                 match sub_opcao:
@@ -186,12 +205,12 @@ def Menu(opcao):
                         break
                     case _:
                         print("Opção inválida.")
-                        getch()
+                        click_para_continuar()
             return True
 
         case "2":  # Ver
             while True:
-                clear_term()
+                limpar_term()
                 MostrarMenuVer()
                 sub_opcao = input()
                 match sub_opcao:
@@ -203,31 +222,31 @@ def Menu(opcao):
                         listar_emprestimos()
                     case "4":
                         print("Ver ultimas devoluções ainda não implementado.")
-                        getch()
+                        click_para_continuar()
                     case "0":
                         break
                     case _:
                         print("Opção inválida.")
-                        getch()
+                        click_para_continuar()
             return True
 
         case "3":  # Deletar
             while True:
-                clear_term()
+                limpar_term()
                 MostrarMenuDeletar()
                 sub_opcao = input()
                 match sub_opcao:
                     case "1":
                         print("Deletar livro ainda não implementado.")
-                        getch()
+                        click_para_continuar()
                     case "2":
                         print("Deletar leitor ainda não implementado.")
-                        getch()
+                        click_para_continuar()
                     case "0":
                         break
                     case _:
                         print("Opção inválida.")
-                        getch()
+                        click_para_continuar()
             return True
 
         case "4":  # Emprestar
@@ -236,23 +255,70 @@ def Menu(opcao):
 
         case "5":  # Devolver
             print("Devolução ainda não implementada.")
-            getch()
+            click_para_continuar()
             return True
 
+        case "6": # Salvar
+            while True:
+                limpar_term()
+                MostrarMenuSalvar()
+                sub_opcao = input()
+                match sub_opcao:
+                    case "1":
+                        if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json():
+                            print(f"{len(livros_gestor.livros)} livros e {len(leitores_gestor.leitores)} leitores salvos em '{leitores_gestor.arquivo}'.")
+                            click_para_continuar()
+                    case "2":
+                        if livros_gestor.salvar_livros_json():        
+                            print(f"{len(livros_gestor.livros)} livros salvos com sucesso em '{livros_gestor.arquivo}'.")
+                            click_para_continuar()
+                    case "3":
+                        if leitores_gestor.salvar_leitores_json():
+                            print(f"{len(leitores_gestor.leitores)} Leitores salvos com sucesso em '{leitores_gestor.arquivo}'.\n")
+                            click_para_continuar()
+                    case "0":
+                        break
+                    case _:
+                            print("Opção inválida.")
+                            click_para_continuar()
+        case "7": # Carregar
+            while True:
+                limpar_term()
+                MostrarMenuCarregar()
+                sub_opcao = input()
+                match sub_opcao:
+                    case "1":
+                        if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json():
+                            print("livros e leitores carregados'.\n")
+                            click_para_continuar()
+                    case "2":
+                        if livros_gestor.carregar_livros_json():
+                            print("livros carregados'.\n")
+                            click_para_continuar()        
+                    case "3":
+                        if leitores_gestor.carregar_leitores_json():
+                            print("leitores carregados'.\n")
+                            click_para_continuar()
+                    case "0":
+                        break
+                    case _:
+                        print("Opção inválida.")
+                        click_para_continuar()
         case "0":  # Voltar/Sair
             return not SairDoLoop()
 
         case _:
             print("Opção inválida.")
-            getch()
+            click_para_continuar()           
             return True
 
 
-leitores_gestor.carregar_leitores_json("leitores.json")
+leitores_gestor.carregar_leitores_json()
+livros_gestor.carregar_livros_json()
 continuar = True
 
 while(continuar):
-    clear_term()
+    limpar_term()
     MostrarMenuInicial()
     opcao = str(input())
     continuar = Menu(opcao)
