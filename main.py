@@ -80,7 +80,6 @@ def MostrarMenuCarregar():
     print("\nOpção: ", end="")
 
 def SairDoLoop():
-    limpar_term()
     print("Deseja realmente sair?")
     sair = input("Digite 's' para sair ou 'n' para continuar: ")    
     if sair == "n":
@@ -89,7 +88,6 @@ def SairDoLoop():
         return True
 
 def cadastrar_leitor():
-    limpar_term()
     print("Cadastrar novo leitor")
     nome = input("Nome: ")
     matricula = input("Matrícula: ")
@@ -99,7 +97,6 @@ def cadastrar_leitor():
     click_para_continuar()
     
 def listar_leitores():
-    limpar_term()
     leitores = leitores_gestor.listar_leitores()
     if not leitores:
         print("Nenhum leitor cadastrado.")
@@ -110,7 +107,6 @@ def listar_leitores():
     click_para_continuar()
     
 def criar_livro():
-    limpar_term()
     print("Criar novo livro")
     titulo = input("Título: ")
     autor = input("Autor: ")
@@ -121,9 +117,55 @@ def criar_livro():
 
     click_para_continuar()
 
+def remover_livro():
+    print("Remover Livro")
+
+    codigo = input("Código do livro a remover: ")
+
+    # Verifica se o livro existe.
+    livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
+    if not livro:
+        print("\nLivro não encontrado.")
+        click_para_continuar()
+        return
+
+    # Verifica se está emprestado.
+    emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
+    if emprestado:
+        print("\nEste livro está emprestado e não pode ser removido.")
+        click_para_continuar()
+        return
+
+    # Pode remover.
+    livros_gestor.remover_livro(livro)
+    print(f'\nLivro "{livro.titulo}" removido com sucesso.')
+    click_para_continuar()
+
+def remover_leitor():
+    print("Remover Leitor\n")
+    listar_leitores()
+    identificador = input("\nNome ou Matrícula do leitor: ")
+
+    leitor = leitores_gestor.encontrar_leitor(identificador)
+    if not leitor:
+        print("\nLeitor não encontrado.")
+        click_para_continuar()
+        return
+
+    # Verifica se ele tem livros emprestados atualmente.
+    emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
+    if emprestando:
+        print("\nEste leitor possui livros emprestados e não pode ser removido.")
+        click_para_continuar()
+        return
+
+    # Pode remover
+    leitores_gestor.remover_leitor(leitor)
+    print(f"\nLeitor '{leitor}' removido com sucesso.")
+    click_para_continuar()
+
 def listar_livros():
 
-    limpar_term()
     livros = livros_gestor.listar_livros()
     if not livros:
         print("Nenhum livro cadastrado.")
@@ -134,7 +176,6 @@ def listar_livros():
     click_para_continuar()
 
 def emprestar_livro():
-    limpar_term()
     print("Emprestar Livro")
     
     codigo = input("Código do livro: ")
@@ -149,7 +190,6 @@ def emprestar_livro():
     click_para_continuar()
 
 def devolver_livro():
-    limpar_term()
     print("Devolver Livro")
 
     codigo = input("Código do livro: ")
@@ -160,7 +200,6 @@ def devolver_livro():
 
 def listar_emprestimos():
 
-    limpar_term()
     emprestimos = livros_gestor.listar_emprestimos()
     if not emprestimos:
         print("Nenhum empréstimo em curso.")
@@ -216,6 +255,7 @@ def Menu(opcao):
                 limpar_term()
                 MostrarMenuAdicionar()
                 sub_opcao = input()
+                limpar_term()
                 match sub_opcao:
                     case "1":
                         criar_livro()
@@ -235,6 +275,7 @@ def Menu(opcao):
                 limpar_term()
                 MostrarMenuVer()
                 sub_opcao = input()
+                limpar_term()
                 match sub_opcao:
                     case "1":
                         listar_livros()
@@ -256,13 +297,12 @@ def Menu(opcao):
                 limpar_term()
                 MostrarMenuDeletar()
                 sub_opcao = input()
+                limpar_term()
                 match sub_opcao:
                     case "1":
-                        print("Deletar livro ainda não implementado.")
-                        click_para_continuar()
+                        remover_livro()
                     case "2":
-                        print("Deletar leitor ainda não implementado.")
-                        click_para_continuar()
+                        remover_leitor()
                     case "0":
                         break
                     case _:
@@ -283,6 +323,7 @@ def Menu(opcao):
                 limpar_term()
                 MostrarMenuSalvar()
                 sub_opcao = input()
+                limpar_term()
                 match sub_opcao:
                     case "1":
                         if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json():
@@ -301,11 +342,13 @@ def Menu(opcao):
                     case _:
                             print("Opção inválida.")
                             click_para_continuar()
+            return True
         case "7": # Carregar
             while True:
                 limpar_term()
                 MostrarMenuCarregar()
                 sub_opcao = input()
+                limpar_term()
                 match sub_opcao:
                     case "1":
                         if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json():
@@ -324,6 +367,7 @@ def Menu(opcao):
                     case _:
                         print("Opção inválida.")
                         click_para_continuar()
+            return True
         case "0":  # Voltar/Sair
             return not SairDoLoop()
 
@@ -341,4 +385,5 @@ while(continuar):
     limpar_term()
     MostrarMenuInicial()
     opcao = str(input())
+    limpar_term()
     continuar = Menu(opcao)
