@@ -4,10 +4,7 @@ from gestorlivros import gestorLivros
 from leitor import Leitor
 from livro import Livro
 
-leitores_gestor = GestorLeitor()
-livros_gestor = gestorLivros()
-
-def MostrarMenuInicial():
+def _mostrar_menu_inicial():
     opcoes = [
         "1 - Adicionar",
         "2 - Ver",
@@ -22,7 +19,7 @@ def MostrarMenuInicial():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
     
-def MostrarMenuAdicionar():
+def _mostrar_menu_adicionar():
     opcoes = [
         "1 - Adicionar Livro",
         "2 - Cadastrar Leitor",
@@ -33,7 +30,7 @@ def MostrarMenuAdicionar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def MostrarMenuVer():
+def _mostrar_menu_ver():
     opcoes = [
         "1 - Ver Livros",
         "2 - Ver Leitores",
@@ -45,7 +42,7 @@ def MostrarMenuVer():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def MostrarMenuDeletar():
+def _mostrar_menu_deletar():
     opcoes = [
         "1 - Deletar Livro",
         "2 - Deletar Leitor",
@@ -55,7 +52,7 @@ def MostrarMenuDeletar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def MostrarMenuSalvar():
+def _mostrar_menu_salvar():
     opcoes = [
         "1 - Salvar Todos os dados",
         "2 - Salvar Livros",
@@ -67,7 +64,7 @@ def MostrarMenuSalvar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def MostrarMenuCarregar():
+def _mostrar_menu_carregar():
     opcoes = [
         "1 - Carregar Todos os dados",
         "2 - Carregar Livros",
@@ -79,7 +76,7 @@ def MostrarMenuCarregar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def SairDoLoop():
+def _sair_do_loop():
     try:
         print("Deseja realmente sair?")
         sair = input("Digite 's' para sair ou 'n' para continuar: ")    
@@ -91,7 +88,7 @@ def SairDoLoop():
         print(f"Ocorreu um erro: {e}")
         return False
 
-def cadastrar_leitor():
+def _cadastrar_leitor():
     try:
         print("Cadastrar novo leitor")
         nome = input("Nome (ou pressione Enter para cancelar): ").strip()
@@ -112,7 +109,7 @@ def cadastrar_leitor():
     finally:
         click_para_continuar()
 
-def listar_leitores():
+def _listar_leitores():
     try:
         leitores = leitores_gestor.listar_leitores()
         if not leitores:
@@ -150,7 +147,7 @@ def criar_livro():
     finally:
         click_para_continuar()
 
-def remover_livro():
+def _remover_livro():
     try:
         print("Remover Livro")
         codigo = input("Código do livro a remover (ou pressione Enter para cancelar): ").strip()
@@ -173,10 +170,10 @@ def remover_livro():
     finally:
         click_para_continuar()
 
-def remover_leitor():
+def _remover_leitor():
     try:
         print("Remover Leitor\n")
-        listar_leitores()
+        _listar_leitores()
         identificador = input("\nNome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
         if identificador == "":
             limpar_term()
@@ -197,7 +194,7 @@ def remover_leitor():
     finally:
         click_para_continuar()
 
-def listar_livros():
+def _listar_livros():
     try:
         livros = livros_gestor.listar_livros()
         if not livros:
@@ -211,7 +208,7 @@ def listar_livros():
     finally:
         click_para_continuar()
 
-def emprestar_livro():
+def _emprestar_livro():
     try:
         print("Emprestar Livro")
         
@@ -236,7 +233,7 @@ def emprestar_livro():
     finally:
         click_para_continuar()
 
-def devolver_livro():
+def _devolver_livro():
     try:
         print("Devolver Livro")
         codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
@@ -251,7 +248,7 @@ def devolver_livro():
     finally:
         click_para_continuar()
 
-def listar_emprestimos():
+def _listar_emprestimos():
     try:
         emprestimos = livros_gestor.listar_emprestimos()
         if not emprestimos:
@@ -264,7 +261,7 @@ def listar_emprestimos():
     finally:
         click_para_continuar()
 
-def listar_devolucoes():
+def _listar_devolucoes():
     try:
         if not livros_gestor.devolucoes:
             print("Nenhuma devolução registrada.")
@@ -319,14 +316,14 @@ def Menu(opcao):
         case "1":  # Adicionar
             while True:
                 limpar_term()
-                MostrarMenuAdicionar()
+                _mostrar_menu_adicionar()
                 sub_opcao = input()
                 limpar_term()
                 match sub_opcao:
                     case "1":
                         criar_livro()
                     case "2":
-                        cadastrar_leitor()
+                        _cadastrar_leitor()
                     case "3":
                         pesquisar_adicionar_livro()
                     case "0":
@@ -339,19 +336,19 @@ def Menu(opcao):
         case "2":  # Ver
             while True:
                 limpar_term()
-                MostrarMenuVer()
+                _mostrar_menu_ver()
                 sub_opcao = input()
                 limpar_term()
                 match sub_opcao:
                     case "1":
-                        listar_livros()
+                        _listar_livros()
                     case "2":
-                        listar_leitores()
+                        _listar_leitores()
                         click_para_continuar()
                     case "3":
-                        listar_emprestimos()
+                        _listar_emprestimos()
                     case "4":
-                        listar_devolucoes()
+                        _listar_devolucoes()
                     case "0":
                         break
                     case _:
@@ -362,14 +359,14 @@ def Menu(opcao):
         case "3":  # Deletar
             while True:
                 limpar_term()
-                MostrarMenuDeletar()
+                _mostrar_menu_deletar()
                 sub_opcao = input()
                 limpar_term()
                 match sub_opcao:
                     case "1":
-                        remover_livro()
+                        _remover_livro()
                     case "2":
-                        remover_leitor()
+                        _remover_leitor()
                     case "0":
                         break
                     case _:
@@ -378,17 +375,17 @@ def Menu(opcao):
             return True
 
         case "4":  # Emprestar
-            emprestar_livro()
+            _emprestar_livro()
             return True
 
         case "5":  # Devolver
-            devolver_livro()
+            _devolver_livro()
             return True
 
         case "6": # Salvar
             while True:
                 limpar_term()
-                MostrarMenuSalvar()
+                _mostrar_menu_salvar()
                 sub_opcao = input()
                 limpar_term()
                 match sub_opcao:
@@ -414,7 +411,7 @@ def Menu(opcao):
         case "7": # Carregar
             while True:
                 limpar_term()
-                MostrarMenuCarregar()
+                _mostrar_menu_carregar()
                 sub_opcao = input()
                 limpar_term()
                 match sub_opcao:
@@ -437,23 +434,26 @@ def Menu(opcao):
                 click_para_continuar()
             return True
         case "0":  # Voltar/Sair
-            return not SairDoLoop()
+            return not _sair_do_loop()
 
         case _:
             print("Opção inválida.")
             click_para_continuar()           
             return True
 
+if __name__ == "__main__":
+    leitores_gestor = GestorLeitor()
+    livros_gestor = gestorLivros()
 
-leitores_gestor.carregar_leitores_json()
-livros_gestor.carregar_livros_json()
-livros_gestor.carregar_emprestimos_json()
-livros_gestor.carregar_devolucoes_json()
-continuar = True
+    leitores_gestor.carregar_leitores_json()
+    livros_gestor.carregar_livros_json()
+    livros_gestor.carregar_emprestimos_json()
+    livros_gestor.carregar_devolucoes_json()
+    continuar = True
 
-while(continuar):
-    limpar_term()
-    MostrarMenuInicial()
-    opcao = str(input())
-    limpar_term()
-    continuar = Menu(opcao)
+    while(continuar):
+        limpar_term()
+        _mostrar_menu_inicial()
+        opcao = str(input())
+        limpar_term()
+        continuar = Menu(opcao)
