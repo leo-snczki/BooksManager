@@ -5,12 +5,6 @@ from emprestimo import EmprestimoLivro
 from terminal import click_para_continuar
 from datetime import datetime
 
-
-def obter_livros():
-    """Obtém os livros do site da API"""
-    response = requests.get("https://livraria-para-teste.herokuapp.com/livros")
-    return response.json()
-
 class gestorLivros:
 
     def __init__(self):
@@ -86,6 +80,7 @@ class gestorLivros:
             return True # permite o if no main.py
         except Exception as e:
             print(f"Erro ao salvar os livros: {e}")
+            click_para_continuar()
 
     def pesquisar_livros_openlibrary(self, termo_busca, max_resultados=5):
         url = f"https://openlibrary.org/search.json?q={termo_busca}"

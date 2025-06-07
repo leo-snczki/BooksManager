@@ -80,172 +80,204 @@ def MostrarMenuCarregar():
     print("\nOpção: ", end="")
 
 def SairDoLoop():
-    print("Deseja realmente sair?")
-    sair = input("Digite 's' para sair ou 'n' para continuar: ")    
-    if sair == "n":
+    try:
+        print("Deseja realmente sair?")
+        sair = input("Digite 's' para sair ou 'n' para continuar: ")    
+        if sair == "n":
+            return False
+        else:
+            return True
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
         return False
-    else:
-        return True
 
 def cadastrar_leitor():
-    print("Cadastrar novo leitor")
-    nome = input("Nome: ")
-    matricula = input("Matrícula: ")
-    leitor = Leitor(nome, matricula)
-    leitores_gestor.adicionar_leitor(leitor)
-    print(f"\nLeitor '{nome}' cadastrado com sucesso!")
-    click_para_continuar()
-    
-def listar_leitores():
-    leitores = leitores_gestor.listar_leitores()
-    if not leitores:
-        print("Nenhum leitor cadastrado.")
-    else:
-        print("Leitores cadastrados:\n")
-        for leitor in leitores:
-            print(f"{leitor.matricula}: {leitor.nome}")
-    click_para_continuar()
-    
-def criar_livro():
-    print("Criar novo livro")
-    titulo = input("Título: ")
-    autor = input("Autor: ")
-    codigo = input("Código: ")
-    livro = Livro(titulo, autor, codigo)
-    livros_gestor.adicionar_livro(livro)
-    print(f"\nLivro '{titulo}' adicionado com sucesso!")
+    try:
+        print("Cadastrar novo leitor")
+        nome = input("Nome: ")
+        matricula = input("Matrícula: ")
+        leitor = Leitor(nome, matricula)
+        leitores_gestor.adicionar_leitor(leitor)
+        print(f"\nLeitor '{nome}' cadastrado com sucesso!")
+    except Exception as e:
+        print(f"Ocorreu um erro ao cadastrar o leitor: {e}")
+    finally:
+        click_para_continuar()
 
-    click_para_continuar()
+def listar_leitores():
+    try:
+        leitores = leitores_gestor.listar_leitores()
+        if not leitores:
+            print("Nenhum leitor cadastrado.")
+        else:
+            print("Leitores cadastrados:\n")
+            for leitor in leitores:
+                print(f"{leitor.matricula}: {leitor.nome}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os leitores: {e}")
+
+def criar_livro():
+    try:
+        print("Criar novo livro")
+        titulo = input("Título: ")
+        autor = input("Autor: ")
+        codigo = input("Código: ")
+        livro = Livro(titulo, autor, codigo)
+        livros_gestor.adicionar_livro(livro)
+        print(f"\nLivro '{titulo}' adicionado com sucesso!")
+    except Exception as e:
+        print(f"Ocorreu um erro ao criar o livro: {e}")
+    finally:
+        click_para_continuar()
 
 def remover_livro():
-    print("Remover Livro")
+    try:
+        print("Remover Livro")
+        codigo = input("Código do livro a remover: ")
 
-    codigo = input("Código do livro a remover: ")
+        # Verifica se o livro existe.
+        livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
+        if not livro:
+            print("\nLivro não encontrado.")
+            return
 
-    # Verifica se o livro existe.
-    livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
-    if not livro:
-        print("\nLivro não encontrado.")
+        # Verifica se está emprestado.
+        emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
+        if emprestado:
+            print("\nEste livro está emprestado e não pode ser removido.")
+            return
+
+        # Pode remover.
+        livros_gestor.remover_livro(livro)
+        print(f'\nLivro "{livro.titulo}" removido com sucesso.')
+    except Exception as e:
+        print(f"Ocorreu um erro ao remover o livro: {e}")
+    finally:
         click_para_continuar()
-        return
-
-    # Verifica se está emprestado.
-    emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
-    if emprestado:
-        print("\nEste livro está emprestado e não pode ser removido.")
-        click_para_continuar()
-        return
-
-    # Pode remover.
-    livros_gestor.remover_livro(livro)
-    print(f'\nLivro "{livro.titulo}" removido com sucesso.')
-    click_para_continuar()
 
 def remover_leitor():
-    print("Remover Leitor\n")
-    listar_leitores()
-    identificador = input("\nNome ou Matrícula do leitor: ")
+    try:
+        print("Remover Leitor\n")
+        listar_leitores()
+        identificador = input("\nNome ou Matrícula do leitor: ")
 
-    leitor = leitores_gestor.encontrar_leitor(identificador)
-    if not leitor:
-        print("\nLeitor não encontrado.")
+        leitor = leitores_gestor.encontrar_leitor(identificador)
+        if not leitor:
+            print("\nLeitor não encontrado.")
+            return
+
+        # Verifica se ele tem livros emprestados atualmente.
+        emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
+        if emprestando:
+            print("\nEste leitor possui livros emprestados e não pode ser removido.")
+            return
+
+        # Pode remover
+        leitores_gestor.remover_leitor(leitor)
+        print(f"\nLeitor '{leitor.matricula}' removido com sucesso.")
+    except Exception as e:
+        print(f"Ocorreu um erro ao remover o leitor: {e}")
+    finally:
         click_para_continuar()
-        return
-
-    # Verifica se ele tem livros emprestados atualmente.
-    emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
-    if emprestando:
-        print("\nEste leitor possui livros emprestados e não pode ser removido.")
-        click_para_continuar()
-        return
-
-    # Pode remover
-    leitores_gestor.remover_leitor(leitor)
-    print(f"\nLeitor '{leitor}' removido com sucesso.")
-    click_para_continuar()
 
 def listar_livros():
-
-    livros = livros_gestor.listar_livros()
-    if not livros:
-        print("Nenhum livro cadastrado.")
-    else:
-        for livro in livros:
-            status = "Disponível" if livro.disponivel else "Emprestado"
-            print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
-    click_para_continuar()
+    try:
+        livros = livros_gestor.listar_livros()
+        if not livros:
+            print("Nenhum livro cadastrado.")
+        else:
+            for livro in livros:
+                status = "Disponível" if livro.disponivel else "Emprestado"
+                print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os livros: {e}")
+    finally:
+        click_para_continuar()
 
 def emprestar_livro():
-    print("Emprestar Livro")
-    
-    codigo = input("Código do livro: ")
-    identificador = input("Nome ou Matrícula do leitor: ")
+    try:
+        print("Emprestar Livro")
+        
+        codigo = input("Código do livro: ")
+        identificador = input("Nome ou Matrícula do leitor: ")
 
-    leitor = leitores_gestor.encontrar_leitor(identificador)
-    if leitor is None: # Se o leitor não existir.
-        print("\nLeitor não encontrado.")
-    else:
-        resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
-        print(f"\n{resultado}")
-    click_para_continuar()
+        leitor = leitores_gestor.encontrar_leitor(identificador)
+        if leitor is None:  # Se o leitor não existir.
+            print("\nLeitor não encontrado.")
+        else:
+            resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
+            print(f"\n{resultado}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao emprestar o livro: {e}")
+    finally:
+        click_para_continuar()
 
 def devolver_livro():
-    print("Devolver Livro")
-
-    codigo = input("Código do livro: ")
-    resultado = livros_gestor.devolver_livro(codigo)
-
-    print(f"\n{resultado}")
-    click_para_continuar()
+    try:
+        print("Devolver Livro")
+        codigo = input("Código do livro: ")
+        resultado = livros_gestor.devolver_livro(codigo)
+        print(f"\n{resultado}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao devolver o livro: {e}")
+    finally:
+        click_para_continuar()
 
 def listar_emprestimos():
-
-    emprestimos = livros_gestor.listar_emprestimos()
-    if not emprestimos:
-        print("Nenhum empréstimo em curso.")
-    else:
-        for emp in emprestimos:
-            print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
-    click_para_continuar()
+    try:
+        emprestimos = livros_gestor.listar_emprestimos()
+        if not emprestimos:
+            print("Nenhum empréstimo em curso.")
+        else:
+            for emp in emprestimos:
+                print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os empréstimos: {e}")
+    finally:
+        click_para_continuar()
 
 def listar_devolucoes():
-    if not livros_gestor.devolucoes:
-        print("Nenhuma devolução registrada.")
-        return
+    try:
+        if not livros_gestor.devolucoes:
+            print("Nenhuma devolução registrada.")
+            return
 
-    print("\nLista de Devoluções:")
-    for dev in livros_gestor.devolucoes:
-        # Se a data de devolução for Nula, exibe "Data desconhecida".
-        data_devolucao = dev.data_devolvida or "Data desconhecida"
-        print(f'- "{dev.livro.titulo}" por {dev.livro.autor}, devolvido por {dev.leitor.matricula}:{dev.leitor.nome} em {data_devolucao}')
-    click_para_continuar()
+        print("\nLista de Devoluções:")
+        for dev in livros_gestor.devolucoes:
+            # Se a data de devolução for Nula, exibe "Data desconhecida".
+            data_devolucao = dev.data_devolvida or "Data desconhecida"
+            print(f'- "{dev.livro.titulo}" por {dev.livro.autor}, devolvido por {dev.leitor.matricula}:{dev.leitor.nome} em {data_devolucao}')
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar as devoluções: {e}")
+    finally:
+        click_para_continuar()
 
 def pesquisar_adicionar_livro():
-    termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
-    resultados = livros_gestor.pesquisar_livros_openlibrary(termo)
+    try:
+        termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
+        resultados = livros_gestor.pesquisar_livros_openlibrary(termo)
 
-    if not resultados:
-        print("Nenhum livro encontrado.")
-        click_para_continuar()
-        return True
+        if not resultados:
+            print("Nenhum livro encontrado.")
+            return True
 
-    print("\nResultados encontrados:")
-    for i, (codigo, titulo, autor) in enumerate(resultados, start=1):
-        print(f"{i}. [{codigo}] {titulo} - {autor}")
+        print("\nResultados encontrados:")
+        for i, (codigo, titulo, autor) in enumerate(resultados, start=1):
+            print(f"{i}. [{codigo}] {titulo} - {autor}")
 
-    escolha = input("Digite o número do livro que deseja adicionar (ou Enter para cancelar): ")
-    if not escolha.isdigit():
-        print("\nOperação cancelada.")
-        click_para_continuar()
-        return
+        escolha = input("Digite o número do livro que deseja adicionar (ou Enter para cancelar): ")
+        if not escolha.isdigit():
+            print("\nOperação cancelada.")
+            return
 
-    index = int(escolha) - 1
-    if not 0 <= index < len(resultados):
-        print("Número inválido.")        
-        click_para_continuar()
-    else:
-        codigo = resultados[index][0]
-        livros_gestor.adicionar_livro_por_codigo(codigo, resultados)
+        index = int(escolha) - 1
+        if not 0 <= index < len(resultados):
+            print("Número inválido.")        
+        else:
+            codigo = resultados[index][0]
+            livros_gestor.adicionar_livro_por_codigo(codigo, resultados)
+    except Exception as e:
+        print(f"Ocorreu um erro ao pesquisar e adicionar o livro: {e}")
 
 
 def Menu(opcao):
@@ -281,6 +313,7 @@ def Menu(opcao):
                         listar_livros()
                     case "2":
                         listar_leitores()
+                        click_para_continuar()
                     case "3":
                         listar_emprestimos()
                     case "4":
