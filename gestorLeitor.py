@@ -2,21 +2,46 @@ from leitor import Leitor
 from terminal import click_para_continuar
 import json
 
-class GestorLeitor:
+#  ______  _______     _     _______  _____   ______  
+# / _____)(_______)   | |   (_______)/ ___ \ (_____ \ 
+#| /  ___  _____       \ \   _      | |   | | _____) )
+#| | (___)|  ___)       \ \ | |     | |   | |(_____ ( 
+#| \____/|| |_____  _____) )| |_____| |___| |      | |
+# \_____/ |_______)(______/  \______)\_____/       |_|
+# _        _______  _____  _______  _____   ______    
+#| |      (_______)(_____)(_______)/ ___ \ (_____ \   
+#| |       _____      _    _      | |   | | _____) )  
+#| |      |  ___)    | |  | |     | |   | |(_____ (   
+#| |_____ | |_____  _| |_ | |_____| |___| |      | |  
+#|_______)|_______)(_____) \______)\_____/       |_|                                                       
 
+
+class GestorLeitor:
     def __init__(self):
         self.leitores: list[Leitor] = []
         self.arquivo = 'leitores.json'
 
+# ============================
+# _adicionar_leitor
+# ============================
     def adicionar_leitor(self, leitor):
         self.leitores.append(leitor)
 
+# ============================
+# _remover_leitor
+# ============================
     def remover_leitor(self, leitor):
         self.leitores.remove(leitor)
 
+# ============================
+# _listar_leitores
+# ============================
     def listar_leitores(self):
         return self.leitores
     
+# ============================
+# _encontrar_leitor
+# ============================
     def encontrar_leitor(self, identificador):
         return next(
             (l for l in self.leitores if l.nome.lower() == identificador.lower() or l.matricula.lower() == identificador.lower()),
@@ -24,6 +49,9 @@ class GestorLeitor:
             None
         )
     
+# ============================
+# _carregar_leitores_json
+# ============================
     def carregar_leitores_json(self):
         try:
             with open(self.arquivo, 'r', encoding='utf-8') as file:
@@ -49,6 +77,9 @@ class GestorLeitor:
             print("Nenhum livro foi carregado.\n")
             click_para_continuar()
         
+# ============================
+# _salvar_leitores_json
+# ============================
     def salvar_leitores_json(self):
         try:
             with open(self.arquivo, 'w', encoding='utf-8') as file:

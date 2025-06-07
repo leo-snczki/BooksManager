@@ -2,7 +2,21 @@ from livro import Livro
 from leitor import Leitor
 from datetime import datetime,timedelta
 
-# lista_de_livros
+
+# _______  ______   ______  ______   _______     _     _______  _____  ______    _____  
+#(_______)|  ___ \ (_____ \(_____ \ (_______)   | |   (_______)(_____)|  ___ \  / ___ \ 
+# _____   | | _ | | _____) )_____) ) _____       \ \   _          _   | | _ | || |   | |
+#|  ___)  | || || ||  ____/(_____ ( |  ___)       \ \ | |        | |  | || || || |   | |
+#| |_____ | || || || |           | || |_____  _____) )| |_____  _| |_ | || || || |___| |
+#|_______)|_||_||_||_|           |_||_______)(______/  \______)(_____)|_||_||_| \_____/ 
+#                       _        _____  _    _  ______    _____                         
+#                      | |      (_____)| |  | |(_____ \  / ___ \                        
+#                      | |         _   | |  | | _____) )| |   | |                       
+#                      | |        | |   \ \/ / (_____ ( | |   | |                       
+#                      | |_____  _| |_   \  /        | || |___| |                       
+#                      |_______)(_____)   \/         |_| \_____/                                                                                                               
+
+
 class EmprestimoLivro:
     def __init__(self, livro: Livro, leitor:Leitor, data_emprestimo=None, data_para_devolucao=None, data_devolvida=None):
         self.livro = livro
@@ -11,6 +25,9 @@ class EmprestimoLivro:
         self.data_para_devolucao = (datetime.now() + timedelta(days=7)).strftime("%d/%m/%Y")
         self.data_devolvida = data_devolvida # se tipar para string e deixar como "", a data é dada como vazia na importação de json.
 
+# ============================
+# _to_dict
+# ============================
     def to_dict(self):
         return {
             "livro": self.livro.to_dict(),
@@ -20,6 +37,9 @@ class EmprestimoLivro:
             "data_devolvida": self.data_devolvida
         }
     
+# ============================
+# _from_dict
+# ============================
     @staticmethod
     def from_dict(data):
         data_emprestimo = datetime.strptime(data["data_emprestimo"], "%d/%m/%Y") if "data_emprestimo" in data else None

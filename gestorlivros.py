@@ -5,8 +5,21 @@ from emprestimo import EmprestimoLivro
 from terminal import click_para_continuar
 from datetime import datetime
 
-class gestorLivros:
+#  ______  _______     _     _______  _____   ______  
+# / _____)(_______)   | |   (_______)/ ___ \ (_____ \ 
+#| /  ___  _____       \ \   _      | |   | | _____) )
+#| | (___)|  ___)       \ \ | |     | |   | |(_____ ( 
+#| \____/|| |_____  _____) )| |_____| |___| |      | |
+# \_____/ |_______)(______/  \______)\_____/       |_|
+# _        _____  _    _  ______    _____     _       
+#| |      (_____)| |  | |(_____ \  / ___ \   | |      
+#| |         _   | |  | | _____) )| |   | |   \ \     
+#| |        | |   \ \/ / (_____ ( | |   | |    \ \    
+#| |_____  _| |_   \  /        | || |___| |_____) )   
+#|_______)(_____)   \/         |_| \_____/(______/    
 
+
+class gestorLivros:
     def __init__(self):
         self.livros: list[Livro] = []
         self.emprestimos: list[EmprestimoLivro] = []
@@ -15,15 +28,27 @@ class gestorLivros:
         self.arquivo_emprestimos = "emprestimos.json"
         self.arquivo_devolucoes = "devolucoes.json"
 
+# ============================
+# _adicionar_livro
+# ============================
     def adicionar_livro(self, livro):
         self.livros.append(livro)
 
+# ============================
+# _remover_livro
+# ============================
     def remover_livro(self, livro):
         self.livros.remove(livro)
 
+# ============================
+# _listar_livros
+# ============================
     def listar_livros(self):
         return self.livros
     
+# ============================
+# _emprestar_livro_obj
+# ============================
     def emprestar_livro_obj(self, codigo, leitor):
         for livro in self.livros:
             if livro.codigo == codigo and livro.disponivel:
@@ -33,6 +58,9 @@ class gestorLivros:
                 return f'O livro "{livro.titulo}" foi emprestado com sucesso (Devolução: {emprestimo.data_para_devolucao}).'
         return "Livro não disponível ou não encontrado."
 
+# ============================
+# _devolver_livro
+# ============================
     def devolver_livro(self, codigo):
         for devolucao in self.emprestimos:
             if devolucao.livro.codigo == codigo:
@@ -43,12 +71,21 @@ class gestorLivros:
                 return f'O livro "{devolucao.livro.titulo}" foi devolvido com sucesso por {devolucao.leitor.matricula}:{devolucao.leitor.nome}.'
         return "Livro não encontrado nos empréstimos."
     
+# ============================
+# _listar_devolucoes
+# ============================
     def listar_devolucoes(self):
         return self.devolucoes
 
+# ============================
+# _listar_emprestimos
+# ============================
     def listar_emprestimos(self):
         return self.emprestimos
     
+# ============================
+# _carregar_livros_json
+# ============================
     def carregar_livros_json(self):
         try:
             with open(self.arquivo_livros, 'r', encoding='utf-8') as file:
@@ -74,6 +111,9 @@ class gestorLivros:
             print("Nenhum livro foi carregado.\n")
             click_para_continuar()
     
+# ============================
+# _carregar_emprestimos_json
+# ============================
     def carregar_emprestimos_json(self):
         try:
             with open(self.arquivo_emprestimos, 'r', encoding='utf-8') as file:
@@ -99,6 +139,9 @@ class gestorLivros:
             print("Nenhum empréstimo foi carregado.\n")
             click_para_continuar()
 
+# ============================
+# _carregar_devolucoes_json
+# ============================
     def carregar_devolucoes_json(self):
         try:
             with open(self.arquivo_devolucoes, 'r', encoding='utf-8') as file:
@@ -120,7 +163,9 @@ class gestorLivros:
             print("Nenhuma devolução foi carregada.\n")
             click_para_continuar()
 
-
+# ============================
+# _salvar_livros_json
+# ============================
     def salvar_livros_json(self):
         try:
             livros_json = [livro.to_dict() for livro in self.livros]
@@ -131,6 +176,9 @@ class gestorLivros:
             print(f"Erro ao salvar os livros: {e}")
             click_para_continuar()
 
+# ============================
+# _salvar_emprestimos_json
+# ============================
     def salvar_emprestimos_json(self):
         try:
             emprestimos_json = [emprestimo.to_dict() for emprestimo in self.emprestimos]
@@ -141,6 +189,9 @@ class gestorLivros:
             print(f"Erro ao salvar os emprestimos: {e}")
             click_para_continuar()
     
+# ============================
+# _salvar_devolucoes_json
+# ============================
     def salvar_devolucoes_json(self):
         try:
             devolucoes_json = [devolucao.to_dict() for devolucao in self.devolucoes]
@@ -150,7 +201,10 @@ class gestorLivros:
         except Exception as e:
             print(f"Erro ao salvar as devoluções: {e}")
             click_para_continuar()
-            
+
+# ============================
+# _pesquisar_livros_openlibrary
+# ============================
     def pesquisar_livros_openlibrary(self, termo_busca, max_resultados=5):
         url = f"https://openlibrary.org/search.json?q={termo_busca}"
         try:
@@ -172,7 +226,10 @@ class gestorLivros:
             print(f"Erro ao buscar livros na Open Library: {e}")
             click_para_continuar()
             return
-    
+
+# ============================
+# _adicionar_livro_por_codigo
+# ============================
     def adicionar_livro_por_codigo(self, codigo, resultados):
         for cod, titulo, autor in resultados:
             if cod == codigo:

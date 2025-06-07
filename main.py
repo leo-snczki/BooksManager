@@ -4,6 +4,16 @@ from gestorlivros import gestorLivros
 from leitor import Leitor
 from livro import Livro
 
+#  ______                       
+# |  ___ \                      
+# | | _ | |  ____  ____   _   _ 
+# | || || | / _  )|  _ \ | | | |
+# | || || |( (/ / | | | || |_| |
+# |_||_||_| \____)|_| |_| \____|                           
+
+# ============================
+# _mostrar_menu_inicial
+# ============================
 def _mostrar_menu_inicial():
     opcoes = [
         "1 - Adicionar",
@@ -18,7 +28,10 @@ def _mostrar_menu_inicial():
     
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
-    
+
+# ============================
+# _mostrar_menu_adicionar
+# ============================
 def _mostrar_menu_adicionar():
     opcoes = [
         "1 - Adicionar Livro",
@@ -30,6 +43,9 @@ def _mostrar_menu_adicionar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+# ============================
+# _mostrar_menu_ver
+# ============================
 def _mostrar_menu_ver():
     opcoes = [
         "1 - Ver Livros",
@@ -42,6 +58,9 @@ def _mostrar_menu_ver():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+# ============================
+# _mostrar_menu_deletar
+# ============================
 def _mostrar_menu_deletar():
     opcoes = [
         "1 - Deletar Livro",
@@ -52,6 +71,9 @@ def _mostrar_menu_deletar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+# ============================
+# _mostrar_menu_salvar
+# ============================
 def _mostrar_menu_salvar():
     opcoes = [
         "1 - Salvar Todos os dados",
@@ -64,6 +86,9 @@ def _mostrar_menu_salvar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
+# ============================
+# _mostrar_menu_carregar
+# ============================
 def _mostrar_menu_carregar():
     opcoes = [
         "1 - Carregar Todos os dados",
@@ -76,39 +101,16 @@ def _mostrar_menu_carregar():
     print("\n".join(opcoes))
     print("\nOpção: ", end="")
 
-def _sair_do_loop():
-    try:
-        print("Deseja realmente sair?")
-        sair = input("Digite 's' para sair ou 'n' para continuar: ")    
-        if sair == "n":
-            return False
-        else:
-            return True
-    except Exception as e:
-        print(f"Ocorreu um erro: {e}")
-        return False
+#  _  _                          
+# | |(_)       _                 
+# | | _   ___ | |_   ____   ____ 
+# | || | /___)|  _) / _  | / ___)
+# | || ||___ || |__( ( | || |    
+# |_||_|(___/  \___)\_||_||_|    
 
-def _cadastrar_leitor():
-    try:
-        print("Cadastrar novo leitor")
-        nome = input("Nome (ou pressione Enter para cancelar): ").strip()
-        if nome == "":
-            limpar_term()
-            print("Operação de cadastro de leitor cancelada.")
-            return
-        matricula = input("Matrícula (ou pressione Enter para cancelar): ").strip()
-        if matricula == "":
-            limpar_term()
-            print("Operação de cadastro de leitor cancelada.")
-            return
-        leitor = Leitor(nome, matricula)
-        leitores_gestor.adicionar_leitor(leitor)
-        print(f"\nLeitor '{nome}' cadastrado com sucesso!")
-    except Exception as e:
-        print(f"Ocorreu um erro ao cadastrar o leitor: {e}")
-    finally:
-        click_para_continuar()
-
+# ============================
+# _listar_leitores
+# ============================
 def _listar_leitores():
     try:
         leitores = leitores_gestor.listar_leitores()
@@ -121,6 +123,68 @@ def _listar_leitores():
     except Exception as e:
         print(f"Ocorreu um erro ao listar os leitores: {e}")
 
+# ============================
+# _listar_livros
+# ============================
+def _listar_livros():
+    try:
+        livros = livros_gestor.listar_livros()
+        if not livros:
+            print("Nenhum livro cadastrado.")
+        else:
+            for livro in livros:
+                status = "Disponível" if livro.disponivel else "Emprestado"
+                print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os livros: {e}")
+    finally:
+        click_para_continuar()
+
+# ============================
+# _listar_devolucoes
+# ============================
+def _listar_devolucoes():
+    try:
+        if not livros_gestor.devolucoes:
+            print("Nenhuma devolução registrada.")
+            return
+
+        print("Lista de Devoluções:")
+        for dev in livros_gestor.devolucoes:
+            # Se a data de devolução for Nula, exibe "Data desconhecida".
+            data_devolucao = dev.data_devolvida or "Data desconhecida"
+            print(f'- "{dev.livro.titulo}" por {dev.livro.autor}, devolvido por {dev.leitor.matricula}:{dev.leitor.nome} em {data_devolucao}')
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar as devoluções: {e}")
+    finally:
+        click_para_continuar()
+
+# ============================
+# _listar_emprestimos
+# ============================
+def _listar_emprestimos():
+    try:
+        emprestimos = livros_gestor.listar_emprestimos()
+        if not emprestimos:
+            print("Nenhum empréstimo em curso.")
+        else:
+            for emp in emprestimos:
+                print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os empréstimos: {e}")
+    finally:
+        click_para_continuar()
+
+#             _  _         _                             
+#            | |(_)       (_)                            
+#   ____   _ | | _   ____  _   ___   ____    ____   ____ 
+#  / _  | / || || | / ___)| | / _ \ |  _ \  / _  | / ___)
+# ( ( | |( (_| || |( (___ | || |_| || | | |( ( | || |    
+#  \_||_| \____||_| \____)|_| \___/ |_| |_| \_||_||_|                                                          
+
+# ============================
+# criar_livro
+# ============================
 def criar_livro():
     try:
         print("Criar novo livro")
@@ -146,137 +210,34 @@ def criar_livro():
         print(f"Ocorreu um erro ao criar o livro: {e}")
     finally:
         click_para_continuar()
+# ============================
+# _cadastrar_leitor
+# ============================
 
-def _remover_livro():
+def _cadastrar_leitor():
     try:
-        print("Remover Livro")
-        codigo = input("Código do livro a remover (ou pressione Enter para cancelar): ").strip()
-        if codigo == "":
+        print("Cadastrar novo leitor")
+        nome = input("Nome (ou pressione Enter para cancelar): ").strip()
+        if nome == "":
             limpar_term()
-            print("Operação de remoção de livro cancelada.")
+            print("Operação de cadastro de leitor cancelada.")
             return
-        livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
-        if not livro:
-            print("\nLivro não encontrado.")
-            return
-        emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
-        if emprestado:
-            print("\nEste livro está emprestado e não pode ser removido.")
-            return
-        livros_gestor.remover_livro(livro)
-        print(f'\nLivro "{livro.titulo}" removido com sucesso.')
-    except Exception as e:
-        print(f"Ocorreu um erro ao remover o livro: {e}")
-    finally:
-        click_para_continuar()
-
-def _remover_leitor():
-    try:
-        print("Remover Leitor\n")
-        _listar_leitores()
-        identificador = input("\nNome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
-        if identificador == "":
+        matricula = input("Matrícula (ou pressione Enter para cancelar): ").strip()
+        if matricula == "":
             limpar_term()
-            print("Operação de remoção de leitor cancelada.")
+            print("Operação de cadastro de leitor cancelada.")
             return
-        leitor = leitores_gestor.encontrar_leitor(identificador)
-        if not leitor:
-            print("\nLeitor não encontrado.")
-            return
-        emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
-        if emprestando:
-            print("\nEste leitor possui livros emprestados e não pode ser removido.")
-            return
-        leitores_gestor.remover_leitor(leitor)
-        print(f"\nLeitor '{leitor.matricula}' removido com sucesso.")
+        leitor = Leitor(nome, matricula)
+        leitores_gestor.adicionar_leitor(leitor)
+        print(f"\nLeitor '{nome}' cadastrado com sucesso!")
     except Exception as e:
-        print(f"Ocorreu um erro ao remover o leitor: {e}")
+        print(f"Ocorreu um erro ao cadastrar o leitor: {e}")
     finally:
         click_para_continuar()
 
-def _listar_livros():
-    try:
-        livros = livros_gestor.listar_livros()
-        if not livros:
-            print("Nenhum livro cadastrado.")
-        else:
-            for livro in livros:
-                status = "Disponível" if livro.disponivel else "Emprestado"
-                print(f"{livro.codigo}: {livro.titulo} - {livro.autor} ({status})")
-    except Exception as e:
-        print(f"Ocorreu um erro ao listar os livros: {e}")
-    finally:
-        click_para_continuar()
-
-def _emprestar_livro():
-    try:
-        print("Emprestar Livro")
-        
-        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
-        if codigo == "":
-            limpar_term()
-            print("Operação de empréstimo de livro cancelada.")
-            return
-        identificador = input("Nome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
-        if identificador == "":
-            limpar_term()
-            print("Operação de empréstimo de livro cancelada.")
-            return
-        leitor = leitores_gestor.encontrar_leitor(identificador)
-        if leitor is None:
-            print("\nLeitor não encontrado.")
-        else:
-            resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
-            print(f"\n{resultado}")
-    except Exception as e:
-        print(f"Ocorreu um erro ao emprestar o livro: {e}")
-    finally:
-        click_para_continuar()
-
-def _devolver_livro():
-    try:
-        print("Devolver Livro")
-        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
-        if codigo == "":
-            limpar_term()
-            print("Operação de devolução de livro cancelada.")
-            return
-        resultado = livros_gestor.devolver_livro(codigo)
-        print(f"\n{resultado}")
-    except Exception as e:
-        print(f"Ocorreu um erro ao devolver o livro: {e}")
-    finally:
-        click_para_continuar()
-
-def _listar_emprestimos():
-    try:
-        emprestimos = livros_gestor.listar_emprestimos()
-        if not emprestimos:
-            print("Nenhum empréstimo em curso.")
-        else:
-            for emp in emprestimos:
-                print(f"{emp.leitor.matricula} - {emp.livro.titulo}:{emp.livro.codigo} - data para devolver: {emp.data_para_devolucao}")
-    except Exception as e:
-        print(f"Ocorreu um erro ao listar os empréstimos: {e}")
-    finally:
-        click_para_continuar()
-
-def _listar_devolucoes():
-    try:
-        if not livros_gestor.devolucoes:
-            print("Nenhuma devolução registrada.")
-            return
-
-        print("Lista de Devoluções:")
-        for dev in livros_gestor.devolucoes:
-            # Se a data de devolução for Nula, exibe "Data desconhecida".
-            data_devolucao = dev.data_devolvida or "Data desconhecida"
-            print(f'- "{dev.livro.titulo}" por {dev.livro.autor}, devolvido por {dev.leitor.matricula}:{dev.leitor.nome} em {data_devolucao}')
-    except Exception as e:
-        print(f"Ocorreu um erro ao listar as devoluções: {e}")
-    finally:
-        click_para_continuar()
-
+# ============================
+# pesquisar_adicionar_livro
+# ============================
 def pesquisar_adicionar_livro():
     try:
         termo = input("Digite o título, autor ou palavra-chave para buscar livros (ou pressione Enter para cancelar): ")
@@ -308,138 +269,384 @@ def pesquisar_adicionar_livro():
             codigo = resultados[index][0]
             livros_gestor.adicionar_livro_por_codigo(codigo, resultados)
     except Exception as e:
-        print(f"Ocorreu um erro ao pesquisar e adicionar o livro: {e}")
+        print(f"Ocorreu um erro ao pesquisar e adicionar o livro: {e}")                                                                                                 
 
+#   ____  ____  ____    ___  _   _  ____   ____ 
+#  / ___)/ _  )|    \  / _ \| | | |/ _  ) / ___)
+# | |   ( (/ / | | | || |_| |\ V /( (/ / | |    
+# |_|    \____)|_|_|_| \___/  \_/  \____)|_|                                                 
+
+# ============================
+# _remover_livro
+# ============================
+def _remover_livro():
+    try:
+        print("Remover Livro")
+        codigo = input("Código do livro a remover (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de remoção de livro cancelada.")
+            return
+        livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
+        if not livro:
+            print("\nLivro não encontrado.")
+            return
+        emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
+        if emprestado:
+            print("\nEste livro está emprestado e não pode ser removido.")
+            return
+        livros_gestor.remover_livro(livro)
+        print(f'\nLivro "{livro.titulo}" removido com sucesso.')
+    except Exception as e:
+        print(f"Ocorreu um erro ao remover o livro: {e}")
+    finally:
+        click_para_continuar()
+
+# ============================
+# _remover_leitor
+# ============================
+def _remover_leitor():
+    try:
+        print("Remover Leitor\n")
+        _listar_leitores()
+        identificador = input("\nNome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
+        if identificador == "":
+            limpar_term()
+            print("Operação de remoção de leitor cancelada.")
+            return
+        leitor = leitores_gestor.encontrar_leitor(identificador)
+        if not leitor:
+            print("\nLeitor não encontrado.")
+            return
+        emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
+        if emprestando:
+            print("\nEste leitor possui livros emprestados e não pode ser removido.")
+            return
+        leitores_gestor.remover_leitor(leitor)
+        print(f"\nLeitor '{leitor.matricula}' removido com sucesso.")
+    except Exception as e:
+        print(f"Ocorreu um erro ao remover o leitor: {e}")
+    finally:
+        click_para_continuar()                                                           
+
+#                                          _                 
+#   ____  ____   ____    ____  ____   ___ | |_   ____   ____ 
+#  / _  )|    \ |  _ \  / ___)/ _  ) /___)|  _) / _  | / ___)
+# ( (/ / | | | || | | || |   ( (/ / |___ || |__( ( | || |    
+#  \____)|_|_|_|| ||_/ |_|    \____)(___/  \___)\_||_||_|    
+#               |_|                                          
+
+# ============================
+# _emprestar_livro
+# ============================
+
+def _emprestar_livro():
+    try:
+        print("Emprestar Livro")
+        
+        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de empréstimo de livro cancelada.")
+            return
+        identificador = input("Nome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
+        if identificador == "":
+            limpar_term()
+            print("Operação de empréstimo de livro cancelada.")
+            return
+        leitor = leitores_gestor.encontrar_leitor(identificador)
+        if leitor is None:
+            print("\nLeitor não encontrado.")
+        else:
+            resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
+            print(f"\n{resultado}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao emprestar o livro: {e}")
+    finally:
+        click_para_continuar()
+
+#      _                      _                     
+#     | |                    | |                    
+#   _ | |  ____  _   _  ___  | | _   _  ____   ____ 
+#  / || | / _  )| | | |/ _ \ | || | | |/ _  ) / ___)
+# ( (_| |( (/ /  \ V /| |_| || | \ V /( (/ / | |    
+#  \____| \____)  \_/  \___/ |_|  \_/  \____)|_|                                                    
+
+# ============================
+# _devolver_livro
+# ============================
+
+def _devolver_livro():
+    try:
+        print("Devolver Livro")
+        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de devolução de livro cancelada.")
+            return
+        resultado = livros_gestor.devolver_livro(codigo)
+        print(f"\n{resultado}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao devolver o livro: {e}")
+    finally:
+        click_para_continuar()
+
+
+#                            _     
+#                _          | |    
+#  ____    ____ | |_   ____ | | _  
+# |    \  / _  ||  _) / ___)| || \ 
+# | | | |( ( | || |__( (___ | | | |
+# |_|_|_| \_||_| \___)\____)|_| |_|                                
 
 def Menu(opcao):
     match opcao:
-        case "1":  # Adicionar
+
+        # ╔══════════════════════════════╗
+        # ║          [1] ADICIONAR       ║
+        # ╚══════════════════════════════╝
+        case "1":
             while True:
                 limpar_term()
                 _mostrar_menu_adicionar()
                 sub_opcao = input()
                 limpar_term()
+
+                # ────────────── Submenu: ADICIONAR ───────────────
                 match sub_opcao:
+                    # ── [1.1] Criar livro ────────────────────────
                     case "1":
                         criar_livro()
+
+                    # ── [1.2] Cadastrar leitor ───────────────────
                     case "2":
                         _cadastrar_leitor()
+
+                    # ── [1.3] Pesquisar e adicionar livro ────────
                     case "3":
                         pesquisar_adicionar_livro()
+
+                    # ── [1.0] Voltar ─────────────────────────────
                     case "0":
                         break
+
+                    # ── Inválida ─────────────────────────────────
                     case _:
                         print("Opção inválida.")
                         click_para_continuar()
             return True
 
-        case "2":  # Ver
+        # ╔══════════════════════════════╗
+        # ║            [2] VER           ║
+        # ╚══════════════════════════════╝
+        case "2":
             while True:
                 limpar_term()
                 _mostrar_menu_ver()
                 sub_opcao = input()
                 limpar_term()
+
+                # ─────────────── Submenu: VER ────────────────────
                 match sub_opcao:
+                    # ── [2.1] Listar livros ─────────────────────
                     case "1":
                         _listar_livros()
+
+                    # ── [2.2] Listar leitores ───────────────────
                     case "2":
                         _listar_leitores()
                         click_para_continuar()
+
+                    # ── [2.3] Listar empréstimos ────────────────
                     case "3":
                         _listar_emprestimos()
+
+                    # ── [2.4] Listar devoluções ─────────────────
                     case "4":
                         _listar_devolucoes()
+
+                    # ── [2.0] Voltar ────────────────────────────
                     case "0":
                         break
+
+                    # ── Inválida ─────────────────────────────────
                     case _:
                         print("Opção inválida.")
                         click_para_continuar()
             return True
 
-        case "3":  # Deletar
+        # ╔══════════════════════════════╗
+        # ║         [3] DELETAR          ║
+        # ╚══════════════════════════════╝
+        case "3":
             while True:
                 limpar_term()
                 _mostrar_menu_deletar()
                 sub_opcao = input()
                 limpar_term()
+
+                # ─────────────── Submenu: DELETAR ────────────────
                 match sub_opcao:
+                    # ── [3.1] Remover livro ─────────────────────
                     case "1":
                         _remover_livro()
+
+                    # ── [3.2] Remover leitor ────────────────────
                     case "2":
                         _remover_leitor()
+
+                    # ── [3.0] Voltar ────────────────────────────
                     case "0":
                         break
+
+                    # ── Inválida ─────────────────────────────────
                     case _:
                         print("Opção inválida.")
                         click_para_continuar()
             return True
 
-        case "4":  # Emprestar
+        # ╔══════════════════════════════╗
+        # ║        [4] EMPRESTAR         ║
+        # ╚══════════════════════════════╝
+        case "4":
             _emprestar_livro()
             return True
 
-        case "5":  # Devolver
+        # ╔══════════════════════════════╗
+        # ║         [5] DEVOLVER         ║
+        # ╚══════════════════════════════╝
+        case "5":
             _devolver_livro()
             return True
 
-        case "6": # Salvar
+        # ╔══════════════════════════════╗
+        # ║          [6] SALVAR          ║
+        # ╚══════════════════════════════╝
+        case "6":
             while True:
                 limpar_term()
                 _mostrar_menu_salvar()
                 sub_opcao = input()
                 limpar_term()
+
+                # ─────────────── Submenu: SALVAR ────────────────
                 match sub_opcao:
+                    # ── [6.1] Salvar tudo ──────────────────────
                     case "1":
-                        if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json() and livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
-                            print(f"{len(livros_gestor.livros)} livros e {len(leitores_gestor.leitores)} leitores salvos em '{leitores_gestor.arquivo}'.")
-                            print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
+                        if (livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json()
+                            and livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json()):
+                            print(f"{len(livros_gestor.livros)} livros e {len(leitores_gestor.leitores)} leitores salvos.")
+                            print(f"{len(livros_gestor.emprestimos)} empréstimos e {len(livros_gestor.devolucoes)} devoluções salvos.")
+
+                    # ── [6.2] Salvar livros ─────────────────────
                     case "2":
-                        if livros_gestor.salvar_livros_json():        
-                            print(f"{len(livros_gestor.livros)} livros salvos com sucesso em '{livros_gestor.arquivo_livros}'.")
+                        if livros_gestor.salvar_livros_json():
+                            print(f"{len(livros_gestor.livros)} livros salvos com sucesso.")
+
+                    # ── [6.3] Salvar leitores ───────────────────
                     case "3":
                         if leitores_gestor.salvar_leitores_json():
-                            print(f"{len(leitores_gestor.leitores)} Leitores salvos com sucesso em '{leitores_gestor.arquivo}'.")
+                            print(f"{len(leitores_gestor.leitores)} leitores salvos com sucesso.")
+
+                    # ── [6.4] Salvar empréstimos e devoluções ──
                     case "4":
-                        if livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
-                            print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
+                        if (livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json()):
+                            print(f"{len(livros_gestor.emprestimos)} empréstimos e {len(livros_gestor.devolucoes)} devoluções salvos.")
+
+                    # ── [6.0] Voltar ────────────────────────────
                     case "0":
                         break
+
+                    # ── Inválida ─────────────────────────────────
                     case _:
-                            print("Opção inválida.")
+                        print("Opção inválida.")
                 click_para_continuar()
             return True
-        case "7": # Carregar
+
+        # ╔══════════════════════════════╗
+        # ║         [7] CARREGAR         ║
+        # ╚══════════════════════════════╝
+        case "7":
             while True:
                 limpar_term()
                 _mostrar_menu_carregar()
                 sub_opcao = input()
                 limpar_term()
+
+                # ─────────────── Submenu: CARREGAR ──────────────
                 match sub_opcao:
+                    # ── [7.1] Carregar tudo ─────────────────────
                     case "1":
-                        if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json() and livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
-                            print("livros,leitores, empréstimos e devoluçoes carregados.")
+                        if (livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json()
+                            and livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json()):
+                            print("Todos os dados carregados com sucesso.")
+
+                    # ── [7.2] Carregar livros ───────────────────
                     case "2":
                         if livros_gestor.carregar_livros_json():
-                            print("livros carregados.")        
+                            print("Livros carregados.")
+
+                    # ── [7.3] Carregar leitores ─────────────────
                     case "3":
                         if leitores_gestor.carregar_leitores_json():
-                            print("leitores carregados.")
+                            print("Leitores carregados.")
+
+                    # ── [7.4] Carregar empréstimos e devoluções ─
                     case "4":
-                        if livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
-                            print("emprestimos e devoluções carregados.")
+                        if (livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json()):
+                            print("Empréstimos e devoluções carregados.")
+
+                    # ── [7.0] Voltar ────────────────────────────
                     case "0":
                         break
+
+                    # ── Inválida ─────────────────────────────────
                     case _:
                         print("Opção inválida.")
                 click_para_continuar()
             return True
-        case "0":  # Voltar/Sair
+
+        # ╔══════════════════════════════╗
+        # ║         [0] SAIR/VOLTAR      ║
+        # ╚══════════════════════════════╝
+        case "0":
             return not _sair_do_loop()
 
+        # ╔══════════════════════════════╗
+        # ║       OPÇÃO INVÁLIDA         ║
+        # ╚══════════════════════════════╝
         case _:
             print("Opção inválida.")
-            click_para_continuar()           
+            click_para_continuar()
             return True
+
+#               _        
+#              (_)       
+#   ___   ____  _   ____ 
+#  /___) / _  || | / ___)
+# |___ |( ( | || || |    
+# (___/  \_||_||_||_|    
+
+# ============================
+# _sair_do_loop
+# ============================
+def _sair_do_loop():
+    try:
+        print("Deseja realmente sair?")
+        sair = input("Digite 's' para sair ou 'n' para continuar: ")    
+        if sair == "n":
+            return False
+        else:
+            return True
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
+        return False
+#                _        
+#               (_)       
+#  ____    ____  _  ____  
+# |    \  / _  || ||  _ \ 
+# | | | |( ( | || || | | |
+# |_|_|_| \_||_||_||_| |_|  
 
 if __name__ == "__main__":
     leitores_gestor = GestorLeitor()
