@@ -1,0 +1,17 @@
+[
+    {
+        "livro": {
+            "titulo": "Guide to Exploration",
+            "autor": "Mojang",
+            "codigo": "OL21351323W",
+            "disponivel": false
+        },
+        "leitor": {
+            "nome": "Bruno Oliveira Santos",
+            "matricula": "L2502"
+        },
+        "data_emprestimo": "07/06/2025",
+        "data_para_devolucao": "14/06/2025",
+        "data_devolvida": ""
+    }
+]

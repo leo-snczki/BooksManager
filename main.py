@@ -60,7 +60,7 @@ def MostrarMenuSalvar():
         "1 - Salvar Todos os dados",
         "2 - Salvar Livros",
         "3 - Salvar Leitores",
-        "4 - Salvar Empréstimos",
+        "4 - Salvar Empréstimos e devoluções",
         "0 - Voltar"
     ]
 
@@ -72,7 +72,7 @@ def MostrarMenuCarregar():
         "1 - Carregar Todos os dados",
         "2 - Carregar Livros",
         "3 - Carregar Leitores",
-        "4 - Carregar Empréstimos",
+        "4 - Carregar Empréstimos e devoluções",
         "0 - Voltar"
     ]
 
@@ -242,7 +242,7 @@ def listar_devolucoes():
             print("Nenhuma devolução registrada.")
             return
 
-        print("\nLista de Devoluções:")
+        print("Lista de Devoluções:")
         for dev in livros_gestor.devolucoes:
             # Se a data de devolução for Nula, exibe "Data desconhecida".
             data_devolucao = dev.data_devolvida or "Data desconhecida"
@@ -359,16 +359,21 @@ def Menu(opcao):
                 limpar_term()
                 match sub_opcao:
                     case "1":
-                        if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json():
+                        if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json() and livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
                             print(f"{len(livros_gestor.livros)} livros e {len(leitores_gestor.leitores)} leitores salvos em '{leitores_gestor.arquivo}'.")
+                            print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
                             click_para_continuar()
                     case "2":
                         if livros_gestor.salvar_livros_json():        
-                            print(f"{len(livros_gestor.livros)} livros salvos com sucesso em '{livros_gestor.arquivo}'.")
+                            print(f"{len(livros_gestor.livros)} livros salvos com sucesso em '{livros_gestor.arquivo_livros}'.")
                             click_para_continuar()
                     case "3":
                         if leitores_gestor.salvar_leitores_json():
-                            print(f"{len(leitores_gestor.leitores)} Leitores salvos com sucesso em '{leitores_gestor.arquivo}'.\n")
+                            print(f"{len(leitores_gestor.leitores)} Leitores salvos com sucesso em '{leitores_gestor.arquivo}'.")
+                            click_para_continuar()
+                    case "4":
+                        if livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
+                            print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
                             click_para_continuar()
                     case "0":
                         break
@@ -384,16 +389,20 @@ def Menu(opcao):
                 limpar_term()
                 match sub_opcao:
                     case "1":
-                        if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json():
-                            print("livros e leitores carregados'.\n")
+                        if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json() and livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
+                            print("livros,leitores, empréstimos e devoluçoes carregados.")
                             click_para_continuar()
                     case "2":
                         if livros_gestor.carregar_livros_json():
-                            print("livros carregados'.\n")
+                            print("livros carregados.")
                             click_para_continuar()        
                     case "3":
                         if leitores_gestor.carregar_leitores_json():
-                            print("leitores carregados'.\n")
+                            print("leitores carregados.")
+                            click_para_continuar()
+                    case "4":
+                        if livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
+                            print("emprestimos e devoluções carregados.")
                             click_para_continuar()
                     case "0":
                         break
@@ -412,6 +421,8 @@ def Menu(opcao):
 
 leitores_gestor.carregar_leitores_json()
 livros_gestor.carregar_livros_json()
+livros_gestor.carregar_emprestimos_json()
+livros_gestor.carregar_devolucoes_json()
 continuar = True
 
 while(continuar):
