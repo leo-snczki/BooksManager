@@ -181,7 +181,7 @@ class gestorLivros:
                     return
                 livro = Livro(titulo, autor, codigo)
                 self.adicionar_livro(livro)
-                print(f'"{titulo}" foi adicionado com sucesso.')
+                print(f"\n'{titulo}' foi adicionado com sucesso.")
                 click_para_continuar()
                 return
         print("Código não encontrado nos resultados.")

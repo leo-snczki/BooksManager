@@ -94,8 +94,16 @@ def SairDoLoop():
 def cadastrar_leitor():
     try:
         print("Cadastrar novo leitor")
-        nome = input("Nome: ")
-        matricula = input("Matrícula: ")
+        nome = input("Nome (ou pressione Enter para cancelar): ").strip()
+        if nome == "":
+            limpar_term()
+            print("Operação de cadastro de leitor cancelada.")
+            return
+        matricula = input("Matrícula (ou pressione Enter para cancelar): ").strip()
+        if matricula == "":
+            limpar_term()
+            print("Operação de cadastro de leitor cancelada.")
+            return
         leitor = Leitor(nome, matricula)
         leitores_gestor.adicionar_leitor(leitor)
         print(f"\nLeitor '{nome}' cadastrado com sucesso!")
@@ -119,9 +127,21 @@ def listar_leitores():
 def criar_livro():
     try:
         print("Criar novo livro")
-        titulo = input("Título: ")
-        autor = input("Autor: ")
-        codigo = input("Código: ")
+        titulo = input("Título (ou pressione Enter para cancelar): ").strip()
+        if titulo == "":
+            limpar_term()
+            print("Operação de criação de livro cancelada.")
+            return
+        autor = input("Autor (ou pressione Enter para cancelar): ").strip()
+        if autor == "":
+            limpar_term()
+            print("Operação de criação de livro cancelada.")
+            return
+        codigo = input("Código (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de criação de livro cancelada.")
+            return
         livro = Livro(titulo, autor, codigo)
         livros_gestor.adicionar_livro(livro)
         print(f"\nLivro '{titulo}' adicionado com sucesso!")
@@ -133,21 +153,19 @@ def criar_livro():
 def remover_livro():
     try:
         print("Remover Livro")
-        codigo = input("Código do livro a remover: ")
-
-        # Verifica se o livro existe.
+        codigo = input("Código do livro a remover (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de remoção de livro cancelada.")
+            return
         livro = next((l for l in livros_gestor.livros if l.codigo == codigo), None)
         if not livro:
             print("\nLivro não encontrado.")
             return
-
-        # Verifica se está emprestado.
         emprestado = any(e.livro.codigo == codigo for e in livros_gestor.emprestimos)
         if emprestado:
             print("\nEste livro está emprestado e não pode ser removido.")
             return
-
-        # Pode remover.
         livros_gestor.remover_livro(livro)
         print(f'\nLivro "{livro.titulo}" removido com sucesso.')
     except Exception as e:
@@ -159,20 +177,19 @@ def remover_leitor():
     try:
         print("Remover Leitor\n")
         listar_leitores()
-        identificador = input("\nNome ou Matrícula do leitor: ")
-
+        identificador = input("\nNome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
+        if identificador == "":
+            limpar_term()
+            print("Operação de remoção de leitor cancelada.")
+            return
         leitor = leitores_gestor.encontrar_leitor(identificador)
         if not leitor:
             print("\nLeitor não encontrado.")
             return
-
-        # Verifica se ele tem livros emprestados atualmente.
         emprestando = any(e.leitor == leitor for e in livros_gestor.emprestimos)
         if emprestando:
             print("\nEste leitor possui livros emprestados e não pode ser removido.")
             return
-
-        # Pode remover
         leitores_gestor.remover_leitor(leitor)
         print(f"\nLeitor '{leitor.matricula}' removido com sucesso.")
     except Exception as e:
@@ -198,11 +215,18 @@ def emprestar_livro():
     try:
         print("Emprestar Livro")
         
-        codigo = input("Código do livro: ")
-        identificador = input("Nome ou Matrícula do leitor: ")
-
+        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de empréstimo de livro cancelada.")
+            return
+        identificador = input("Nome ou Matrícula do leitor (ou pressione Enter para cancelar): ").strip()
+        if identificador == "":
+            limpar_term()
+            print("Operação de empréstimo de livro cancelada.")
+            return
         leitor = leitores_gestor.encontrar_leitor(identificador)
-        if leitor is None:  # Se o leitor não existir.
+        if leitor is None:
             print("\nLeitor não encontrado.")
         else:
             resultado = livros_gestor.emprestar_livro_obj(codigo, leitor)
@@ -215,7 +239,11 @@ def emprestar_livro():
 def devolver_livro():
     try:
         print("Devolver Livro")
-        codigo = input("Código do livro: ")
+        codigo = input("Código do livro (ou pressione Enter para cancelar): ").strip()
+        if codigo == "":
+            limpar_term()
+            print("Operação de devolução de livro cancelada.")
+            return
         resultado = livros_gestor.devolver_livro(codigo)
         print(f"\n{resultado}")
     except Exception as e:
@@ -254,7 +282,13 @@ def listar_devolucoes():
 
 def pesquisar_adicionar_livro():
     try:
-        termo = input("Digite o título, autor ou palavra-chave para buscar livros: ")
+        termo = input("Digite o título, autor ou palavra-chave para buscar livros (ou pressione Enter para cancelar): ")
+        
+        if termo == "":
+            limpar_term()
+            print("Operação de pesquisa e adição de livro cancelada.")
+            return
+        
         resultados = livros_gestor.pesquisar_livros_openlibrary(termo)
 
         if not resultados:
@@ -265,7 +299,7 @@ def pesquisar_adicionar_livro():
         for i, (codigo, titulo, autor) in enumerate(resultados, start=1):
             print(f"{i}. [{codigo}] {titulo} - {autor}")
 
-        escolha = input("Digite o número do livro que deseja adicionar (ou Enter para cancelar): ")
+        escolha = input("\nDigite o número do livro que deseja adicionar (ou Enter para cancelar): ")
         if not escolha.isdigit():
             print("\nOperação cancelada.")
             return
