@@ -396,24 +396,20 @@ def Menu(opcao):
                         if livros_gestor.salvar_livros_json() and leitores_gestor.salvar_leitores_json() and livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
                             print(f"{len(livros_gestor.livros)} livros e {len(leitores_gestor.leitores)} leitores salvos em '{leitores_gestor.arquivo}'.")
                             print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
-                            click_para_continuar()
                     case "2":
                         if livros_gestor.salvar_livros_json():        
                             print(f"{len(livros_gestor.livros)} livros salvos com sucesso em '{livros_gestor.arquivo_livros}'.")
-                            click_para_continuar()
                     case "3":
                         if leitores_gestor.salvar_leitores_json():
                             print(f"{len(leitores_gestor.leitores)} Leitores salvos com sucesso em '{leitores_gestor.arquivo}'.")
-                            click_para_continuar()
                     case "4":
                         if livros_gestor.salvar_emprestimos_json() and livros_gestor.salvar_devolucoes_json():
                             print(f"{len(livros_gestor.emprestimos)} livros emprestados e {len(livros_gestor.devolucoes)} livros devolvidos salvos, respectivamente, em '{livros_gestor.arquivo_emprestimos}' e {livros_gestor.arquivo_devolucoes}'.")
-                            click_para_continuar()
                     case "0":
                         break
                     case _:
                             print("Opção inválida.")
-                            click_para_continuar()
+                click_para_continuar()
             return True
         case "7": # Carregar
             while True:
@@ -425,24 +421,20 @@ def Menu(opcao):
                     case "1":
                         if livros_gestor.carregar_livros_json() and leitores_gestor.carregar_leitores_json() and livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
                             print("livros,leitores, empréstimos e devoluçoes carregados.")
-                            click_para_continuar()
                     case "2":
                         if livros_gestor.carregar_livros_json():
-                            print("livros carregados.")
-                            click_para_continuar()        
+                            print("livros carregados.")        
                     case "3":
                         if leitores_gestor.carregar_leitores_json():
                             print("leitores carregados.")
-                            click_para_continuar()
                     case "4":
                         if livros_gestor.carregar_emprestimos_json() and livros_gestor.carregar_devolucoes_json():
                             print("emprestimos e devoluções carregados.")
-                            click_para_continuar()
                     case "0":
                         break
                     case _:
                         print("Opção inválida.")
-                        click_para_continuar()
+                click_para_continuar()
             return True
         case "0":  # Voltar/Sair
             return not SairDoLoop()
