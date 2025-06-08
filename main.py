@@ -3,6 +3,7 @@ from gestorLeitor import GestorLeitor
 from gestorlivros import gestorLivros
 from leitor import Leitor
 from livro import Livro
+from datetime import datetime
 
 #  ______                       
 # |  ___ \                      
