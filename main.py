@@ -435,7 +435,7 @@ def gerar_relatorio():
         emprestimos = livros_gestor.listar_emprestimos()
         leitores = leitores_gestor.listar_leitores()
         devolucoes = livros_gestor.listar_devolucoes()            
-        data_atual = datetime.now().strftime("%d/%m/%Y")
+        #data_atual = datetime.now().strftime("%d/%m/%Y")
 
         
         # Verificar se há dados para exportar
