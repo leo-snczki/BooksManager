@@ -3,6 +3,7 @@ from gestorLeitor import GestorLeitor
 from gestorlivros import gestorLivros
 from leitor import Leitor
 from livro import Livro
+from datetime import datetime
 
 #  ______                       
 # |  ___ \                      
@@ -23,6 +24,7 @@ def _mostrar_menu_inicial():
         "5 - Devolver",
         "6 - Salvar",	
         "7 - Carregar",
+        "8 - Gerar relatório",
         "0 - Sair"
     ]
     
@@ -421,6 +423,62 @@ def _devolver_livro():
     finally:
         click_para_continuar()
 
+# gerar relatório
+def gerar_relatorio():
+    try:
+        print("Gerar Relatório")
+        
+        arquivo_relatorio = "relatorio.txt"
+        
+        # Coletar dados
+        livros = livros_gestor.listar_livros()
+        emprestimos = livros_gestor.listar_emprestimos()
+        leitores = leitores_gestor.listar_leitores()
+        devolucoes = livros_gestor.listar_devolucoes()            
+        data_atual = datetime.now().strftime("%d/%m/%Y")
+
+        
+        # Verificar se há dados para exportar
+        if not livros and not emprestimos and not leitores and not devolucoes:
+            print("Nenhum dado disponível para gerar o relatório.")
+            return
+        
+        # Criar e abrir o arquivo para escrita
+        with open(arquivo_relatorio, "w", encoding="utf-8") as file:
+            file.write("Relatório de Livros, Empréstimos, Leitores e Devoluções\n")
+            file.write("=" * 60 + "\n\n")
+            
+            # Escrever livros
+            file.write("Livros:\n")
+            for livro in livros:
+                file.write(f"{livro.titulo} - {livro.autor} - {livro.ano} - {livro.editora}\n")
+            file.write("\n")
+            
+            # Escrever empréstimos.
+            file.write("Empréstimos:\n")
+            for emprestimo in emprestimos:
+                file.write(f"{emprestimo.leitor}\n")
+            file.write("\n")
+            
+            # Escrever leitores
+            file.write("Leitores:\n")
+            for leitor in leitores:
+                file.write(f"{leitor.matricula} - {leitor.nome}\n")
+            file.write("\n")
+            
+            # Escrever devoluções
+            file.write("Devoluções:\n")
+            for devolucao in devolucoes:
+                file.write(f"{devolucao.leitor.matricula} - {devolucao.leitor.nome} - {devolucao.livro.titulo} - {devolucao.data_devolucao}\n")
+        
+        print("Relatório gerado com sucesso em 'relatorio.txt'.")
+    
+    except Exception as e:
+        print(f"Ocorreu um erro ao gerar o relatório: {e}")
+    
+    finally:
+        click_para_continuar()
+
 
 #                            _     
 #                _          | |    
@@ -637,6 +695,8 @@ def Menu(opcao):
                 click_para_continuar()
             return True
 
+        case "8":
+            gerar_relatorio()
         # ╔══════════════════════════════╗
         # ║         [0] SAIR/VOLTAR      ║
         # ╚══════════════════════════════╝
