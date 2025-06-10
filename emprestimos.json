@@ -1,6 +1,21 @@
 [
     {
         "livro": {
+            "titulo": "Harry Potter and the Prisoner of Azkaban",
+            "autor": "J. K. Rowling",
+            "codigo": "OL82536W",
+            "disponivel": false
+        },
+        "leitor": {
+            "nome": "Bruno Oliveira Santos",
+            "matricula": "L2502"
+        },
+        "data_emprestimo": "10/06/2025",
+        "data_para_devolucao": "17/06/2025",
+        "data_devolvida": null
+    },
+    {
+        "livro": {
             "titulo": "Guide to Exploration",
             "autor": "Mojang",
             "codigo": "OL21351323W",
@@ -10,8 +25,38 @@
             "nome": "Bruno Oliveira Santos",
             "matricula": "L2502"
         },
-        "data_emprestimo": "07/06/2025",
-        "data_para_devolucao": "14/06/2025",
-        "data_devolvida": ""
+        "data_emprestimo": "10/06/2025",
+        "data_para_devolucao": "17/06/2025",
+        "data_devolvida": null
+    },
+    {
+        "livro": {
+            "titulo": "1984",
+            "autor": "George Orwell",
+            "codigo": "OL7343621W",
+            "disponivel": false
+        },
+        "leitor": {
+            "nome": "Bruno Oliveira Santos",
+            "matricula": "L2502"
+        },
+        "data_emprestimo": "10/06/2025",
+        "data_para_devolucao": "17/06/2025",
+        "data_devolvida": null
+    },
+    {
+        "livro": {
+            "titulo": "Pride and Prejudice",
+            "autor": "Jane Austen",
+            "codigo": "OL152108W",
+            "disponivel": false
+        },
+        "leitor": {
+            "nome": "Ana Beatriz Costa",
+            "matricula": "L2501"
+        },
+        "data_emprestimo": "10/06/2025",
+        "data_para_devolucao": "17/06/2025",
+        "data_devolvida": null
     }
 ]

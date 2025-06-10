@@ -50,6 +50,9 @@ class gestorLivros:
 # _emprestar_livro_obj
 # ============================
     def emprestar_livro_obj(self, codigo, leitor):
+        emprestimos_atuais = self.listar_emprestimos_por_leitor(leitor)
+        if len(emprestimos_atuais) >= 3:
+            return f"O leitor {leitor.nome} já possui o máximo de 3 livros emprestados."
         for livro in self.livros:
             if livro.codigo == codigo and livro.disponivel:
                 livro.disponivel = False
@@ -82,7 +85,14 @@ class gestorLivros:
 # ============================
     def listar_emprestimos(self):
         return self.emprestimos
-    
+
+# ============================
+# _listar_emprestimos_por_leitor
+# ============================
+    def listar_emprestimos_por_leitor(self, leitor):
+        return [emprestimo for emprestimo in self.emprestimos if emprestimo.leitor.matricula == leitor.matricula]
+
+
 # ============================
 # _carregar_livros_json
 # ============================
@@ -120,6 +130,10 @@ class gestorLivros:
                 emprestimos_json = json.load(file)
             for emprestimo_json in emprestimos_json:
                 emprestimo = EmprestimoLivro.from_dict(emprestimo_json)
+                for livro in self.livros:
+                    if livro.codigo == emprestimo.livro.codigo:
+                        livro.disponivel = False
+                        break
                 self.emprestimos.append(emprestimo)
             return True
         

@@ -1,32 +1,17 @@
 [
     {
         "livro": {
-            "titulo": "1984",
-            "autor": "George Orwell",
-            "codigo": "OL7343621W",
+            "titulo": "Dom Casmurro",
+            "autor": "Machado de Assis",
+            "codigo": "OL453152W",
             "disponivel": true
         },
         "leitor": {
             "nome": "Ana Beatriz Costa",
             "matricula": "L2501"
         },
-        "data_emprestimo": "07/06/2025",
-        "data_para_devolucao": "14/06/2025",
-        "data_devolvida": "07/06/2025"
-    },
-    {
-        "livro": {
-            "titulo": "1984",
-            "autor": "George Orwell",
-            "codigo": "OL7343621W",
-            "disponivel": true
-        },
-        "leitor": {
-            "nome": "Henrique Silva Prado",
-            "matricula": "L2508"
-        },
-        "data_emprestimo": "07/06/2025",
-        "data_para_devolucao": "14/06/2025",
-        "data_devolvida": "07/06/2025"
+        "data_emprestimo": "10/06/2025",
+        "data_para_devolucao": "17/06/2025",
+        "data_devolvida": "10/06/2025"
     }
 ]

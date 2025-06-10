@@ -22,7 +22,7 @@ class EmprestimoLivro:
         self.livro = livro
         self.leitor = leitor
         self.data_emprestimo = datetime.today()
-        self.data_para_devolucao = (datetime.now() + timedelta(days=7)).strftime("%d/%m/%Y")
+        self.data_para_devolucao = (datetime.now() + timedelta(days=7)).strftime("%d/%m/%Y") if data_para_devolucao is None else data_para_devolucao
         self.data_devolvida = data_devolvida # se tipar para string e deixar como "", a data é dada como vazia na importação de json.
 
 # ============================

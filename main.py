@@ -52,6 +52,7 @@ def _mostrar_menu_ver():
         "2 - Ver Leitores",
         "3 - Ver empréstimos",
         "4 - Ver ultimas devoluções",
+        "5 - Ver livros emprestados por aluno",
         "0 - Voltar"
     ]
 
@@ -174,6 +175,35 @@ def _listar_emprestimos():
         print(f"Ocorreu um erro ao listar os empréstimos: {e}")
     finally:
         click_para_continuar()
+
+# ============================
+# _listar_livros_emprestados_por_aluno
+# ============================
+def _listar_livros_emprestados_por_aluno():
+    try:
+        identificador = input("Digite o nome ou matrícula do leitor: ").strip()
+        if not identificador:
+            print("Operação cancelada.")
+            return
+        
+        leitor = leitores_gestor.encontrar_leitor(identificador)
+        if not leitor:
+            print("Leitor não encontrado.")
+            return
+        
+        emprestimos = livros_gestor.listar_emprestimos_por_leitor(leitor)
+        if not emprestimos:
+            print(f"O leitor {leitor.nome} não possui livros emprestados.")
+            return
+        
+        print(f"\nLivros emprestados por {leitor.nome}:\n")
+        for emp in emprestimos:
+            print(f"- {emp.livro.titulo} (Código: {emp.livro.codigo}) - Data para devolução: {emp.data_para_devolucao}")
+    except Exception as e:
+        print(f"Ocorreu um erro ao listar os livros emprestados: {e}")
+    finally:
+        click_para_continuar()
+
 
 #             _  _         _                             
 #            | |(_)       (_)                            
@@ -464,7 +494,8 @@ def Menu(opcao):
                     # ── [2.4] Listar devoluções ─────────────────
                     case "4":
                         _listar_devolucoes()
-
+                    case "5":
+                        _listar_livros_emprestados_por_aluno()
                     # ── [2.0] Voltar ────────────────────────────
                     case "0":
                         break
